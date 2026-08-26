@@ -47,9 +47,9 @@ async function ogImage(source) {
   const text = Buffer.from(`
     <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630">
       <text x="480" y="292" font-family="Segoe UI, Helvetica, Arial, sans-serif"
-            font-size="72" font-weight="700" fill="#f2f5f8">Habit Tracker</text>
+            font-size="72" font-weight="700" fill="#f2f5f8">Track Your Way</text>
       <text x="482" y="352" font-family="Segoe UI, Helvetica, Arial, sans-serif"
-            font-size="30" fill="#9fb0c0">Habitos y estado de animo, local-first</text>
+            font-size="30" fill="#9fb0c0">Habitos y estado de animo, a tu manera</text>
       <rect x="482" y="392" width="150" height="4" rx="2" fill="${BRAND_ACCENT}" />
     </svg>`);
 

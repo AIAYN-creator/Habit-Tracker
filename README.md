@@ -2,15 +2,15 @@
   <img src="brand/logo.svg" alt="" width="96" height="96" />
 </p>
 
-<h1 align="center">Habit Tracker</h1>
+<h1 align="center">Track Your Way</h1>
 
 <p align="center">
-  <em>Marca provisional: la dirección está aprobada, el nombre todavía no.</em>
+  <em>Hábitos y estado de ánimo, a tu manera.</em>
 </p>
 
 [![ci](https://github.com/AIAYN-creator/Habit-Tracker/actions/workflows/ci.yml/badge.svg)](https://github.com/AIAYN-creator/Habit-Tracker/actions/workflows/ci.yml)
 
-Tracker de hábitos y estado de ánimo **local-first**, instalable como PWA, que guarda los datos en
+**Track Your Way** es un tracker de hábitos y estado de ánimo **local-first**, instalable como PWA, que guarda los datos en
 el dispositivo y los sincroniza contra un repositorio privado de GitHub del propio usuario. Sin
 servidor, sin base de datos gestionada, sin cuenta que crear.
 
@@ -28,9 +28,10 @@ preview— con un solo comando:
 npm run icons
 ```
 
-Es **provisional** por una razón concreta: `Habit Tracker` describe la categoría, no el producto,
-y el nombre condiciona el logotipo. Cuando haya nombre se rehace el SVG maestro y se regenera todo
-sin tocar nada más. Ver [diseno/logo.md](docs/diseno/logo.md).
+El nombre juega con las dos cosas que definen el proyecto: registrar, y hacerlo a tu manera. El
+símbolo se mantiene como marca provisional hasta que merezca una pasada de diseño en condiciones;
+la cañería ya está montada, así que rehacer el SVG maestro y ejecutar el comando regenera todo.
+Ver [diseno/logo.md](docs/diseno/logo.md).
 
 Los colores de marca son tokens propios, separados de los del tema: el usuario puede cambiar la
 paleta entera de la app y la marca no se va con ella.

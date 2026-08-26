@@ -1,32 +1,49 @@
 import { useState } from 'react';
 import { DayEntry } from '@/features/entry/DayEntry';
 import { HabitForm } from '@/features/schema/HabitForm';
+import { MoodForm } from '@/features/schema/MoodForm';
 import { Sheet } from '@/ui';
 
 /**
- * `app/` es quien compone: el registro diario y el alta de habitos son dos
- * features distintas y no pueden importarse entre si.
+ * `app/` es quien compone: el registro diario y la definicion del schema son
+ * dos features distintas y no pueden importarse entre si.
  */
 export function App() {
-  const [managing, setManaging] = useState(false);
+  const [panel, setPanel] = useState<'habits' | 'moods' | null>(null);
 
   return (
     <>
       <DayEntry
         onManage={() => {
-          setManaging(true);
+          setPanel('habits');
+        }}
+        onManageMoods={() => {
+          setPanel('moods');
         }}
       />
       <Sheet
-        open={managing}
+        open={panel === 'habits'}
         title="Hábitos"
         onClose={() => {
-          setManaging(false);
+          setPanel(null);
         }}
       >
         <HabitForm
           onDone={() => {
-            setManaging(false);
+            setPanel(null);
+          }}
+        />
+      </Sheet>
+      <Sheet
+        open={panel === 'moods'}
+        title="Estado de ánimo"
+        onClose={() => {
+          setPanel(null);
+        }}
+      >
+        <MoodForm
+          onDone={() => {
+            setPanel(null);
           }}
         />
       </Sheet>
