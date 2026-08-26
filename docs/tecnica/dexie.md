@@ -18,6 +18,23 @@ Nombre `habits`, gestionada con Dexie.
 | `settings` | `key` | — | Tema, densidad, preferencias de visualización |
 | `outbox` | `++id` | `createdAt` | Cambios pendientes de empujar a GitHub |
 | `syncState` | `key` | — | Último commit visto, última sincronización, estado del token |
+| `syncBase` | `path` | `syncedAt` | Última versión sincronizada de cada fichero del repo |
+
+### Por qué hace falta `syncBase`
+
+La fusión a tres bandas de `adr-sync` necesita tres versiones de cada fichero: la local, la remota
+y **la base**, que es la última que ambos lados compartieron. Sin base no se puede saber quién
+cambió qué, y la fusión degenera en el last-write-wins de fichero entero que esa ADR descarta
+precisamente por perder datos.
+
+Guardarla en local en lugar de pedirla a GitHub por SHA es deliberado: convertir la fusión en una
+operación que necesita red la rompería justo cuando la red es el problema. Cuesta unos 400 kB al
+año —duplica el tamaño de los datos— y a esta escala es irrelevante.
+
+Se escribe **sólo al cerrar con éxito un ciclo de sincronización**, en la misma transacción que el
+resto del resultado. Una base actualizada tras una sincronización que falló a medias haría creer
+al ciclo siguiente que unos cambios ya viajaron cuando no lo hicieron, y eso es pérdida de datos
+silenciosa.
 
 ### Por qué `date` es la clave primaria de `entries`
 
@@ -46,6 +63,7 @@ db.version(1).stores({
   settings: 'key',
   outbox: '++id, createdAt',
   syncState: 'key',
+  syncBase: 'path, syncedAt',
 });
 ```
 
@@ -84,9 +102,10 @@ el límite no es un problema real, pero saber que la app puede consultarlo evita
 
 ## Criterios de aceptación
 
-- [ ] La base de datos se crea en el primer arranque con las seis tablas.
+- [ ] La base de datos se crea en el primer arranque con las siete tablas.
 - [ ] `useLiveQuery` sobre el mes actual se actualiza al guardar una entrada, sin recargar.
 - [ ] Guardar entrada y encolar en `outbox` ocurren en una única transacción, verificado con un
       test que fuerza un fallo a mitad.
 - [ ] Existe un test de migración de la versión 1 a una versión 2 de prueba, con datos dentro.
 - [ ] Queda documentada por escrito la diferencia entre versión de Dexie y `schemaVersion`.
+- [ ] `syncBase` sólo se escribe al cerrar con éxito un ciclo, verificado con un fallo forzado.
