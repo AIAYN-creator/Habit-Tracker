@@ -5,7 +5,14 @@ import styles from './HabitForm.module.css';
 
 const PALETTE = ['#3d5a80', '#81b29a', '#e07a5f', '#9d8189', '#f2cc8f', '#5f797b'] as const;
 
-const TYPES: { value: MoodType; name: string; example: string }[] = [
+/**
+ * Las caras son una escala de 1 a 5 con `display.input`, no un tipo aparte: lo
+ * que se guarda sigue siendo un numero comparable con cualquier otra escala.
+ */
+type FormType = MoodType | 'faces';
+
+const TYPES: { value: FormType; name: string; example: string }[] = [
+  { value: 'faces', name: 'Caritas', example: 'De 😞 a 😄, un toque' },
   { value: 'scale', name: 'Escala', example: 'Del 1 al 5' },
   { value: 'tags', name: 'Etiquetas', example: 'Social, ansioso…' },
   { value: 'note', name: 'Nota', example: 'Texto libre' },
@@ -20,7 +27,7 @@ const TYPES: { value: MoodType; name: string; example: string }[] = [
 export function MoodForm({ onDone }: { onDone: () => void }) {
   const dimensions = useLiveQuery(() => schema.listActiveMoods(), []);
   const [name, setName] = useState('');
-  const [type, setType] = useState<MoodType>('scale');
+  const [type, setType] = useState<FormType>('faces');
   const [max, setMax] = useState('5');
   const [low, setLow] = useState('');
   const [high, setHigh] = useState('');
@@ -44,22 +51,25 @@ export function MoodForm({ onDone }: { onDone: () => void }) {
 
     await schema.createMood({
       name: trimmed,
-      type,
+      type: type === 'faces' ? 'scale' : type,
+      display: type === 'faces' ? { input: 'faces' } : undefined,
       config:
-        type === 'scale'
-          ? {
-              min: 1,
-              max: upper,
-              labels: low.trim() || high.trim() ? [low.trim(), high.trim()] : undefined,
-            }
-          : type === 'tags'
+        type === 'faces'
+          ? { min: 1, max: 5 }
+          : type === 'scale'
             ? {
-                options: options
-                  .split(',')
-                  .map((tag) => tag.trim())
-                  .filter((tag) => tag.length > 0),
+                min: 1,
+                max: upper,
+                labels: low.trim() || high.trim() ? [low.trim(), high.trim()] : undefined,
               }
-            : {},
+            : type === 'tags'
+              ? {
+                  options: options
+                    .split(',')
+                    .map((tag) => tag.trim())
+                    .filter((tag) => tag.length > 0),
+                }
+              : {},
       color,
     });
     onDone();

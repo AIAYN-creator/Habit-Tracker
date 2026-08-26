@@ -2,6 +2,15 @@ import { useEffect, useState } from 'react';
 import type { MoodDimension, MoodValue } from '@/data';
 import styles from './HabitControl.module.css';
 
+/** Las cinco caras, de peor a mejor. El valor guardado sigue siendo un 1 a 5. */
+const FACES = [
+  { value: 1, emoji: '😞', label: 'Muy mal' },
+  { value: 2, emoji: '🙁', label: 'Mal' },
+  { value: 3, emoji: '😐', label: 'Normal' },
+  { value: 4, emoji: '🙂', label: 'Bien' },
+  { value: 5, emoji: '😄', label: 'Muy bien' },
+] as const;
+
 interface Props {
   dimension: MoodDimension;
   value: MoodValue | undefined;
@@ -12,6 +21,35 @@ interface Props {
 /** Controles de las dimensiones de animo. Ver docs/producto/moods.md. */
 export function MoodControl({ dimension, value, onSet, onClear }: Props) {
   const style = { '--habit-color': dimension.color } as React.CSSProperties;
+
+  if (dimension.type === 'scale' && dimension.display?.input === 'faces') {
+    return (
+      <div className={styles.rowColumn} style={style}>
+        <span className={styles.name}>{dimension.name}</span>
+        <div className={styles.faces} role="radiogroup" aria-label={dimension.name}>
+          {FACES.map((face) => {
+            const selected = value === face.value;
+            return (
+              <button
+                key={face.value}
+                type="button"
+                role="radio"
+                aria-checked={selected}
+                aria-label={face.label}
+                className={styles.face}
+                onClick={() => {
+                  if (selected) onClear();
+                  else onSet(face.value);
+                }}
+              >
+                <span aria-hidden="true">{face.emoji}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
 
   if (dimension.type === 'scale') {
     const max = dimension.config.max ?? 5;
