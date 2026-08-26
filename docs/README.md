@@ -22,6 +22,8 @@ de su tarjeta, que es también el scope de los commits relacionados: `git log --
 | [producto/habitos.md](producto/habitos.md) | CRUD de hábitos: tipos, frecuencia, archivado y reordenación |
 | [producto/moods.md](producto/moods.md) | CRUD de dimensiones de mood: escalas, tags y notas |
 | [producto/entrada.md](producto/entrada.md) | La pantalla de registro diario, reutilizada por el historial |
+| [producto/calendario.md](producto/calendario.md) | Historial en calendario: anillo de completitud y navegación |
+| [producto/lista.md](producto/lista.md) | Historial en lista: resumen por día, paginación y filtro |
 
 ## Técnica
 
@@ -54,6 +56,7 @@ de su tarjeta, que es también el scope de los commits relacionados: `git log --
 | [diseno/splash.md](diseno/splash.md) | Generación y verificación de los assets de PWA |
 | [diseno/a11y.md](diseno/a11y.md) | Accesibilidad, contraste y qué pasa con los colores del usuario |
 | [diseno/inputs.md](diseno/inputs.md) | Controles por tipo de dato y los tres estados de un registro |
+| [diseno/micro.md](diseno/micro.md) | Micro-interacciones: dónde animar, dónde no y con qué duración |
 
 ## Gráficas
 

@@ -13,7 +13,7 @@ import { join, dirname } from 'node:path';
 
 export const SECTIONS = {
   adr: ['charts', 'adr-repo', 'adr-sync'],
-  producto: ['vision', 'modelo', 'flujos', 'habitos', 'moods', 'entrada'],
+  producto: ['vision', 'modelo', 'flujos', 'habitos', 'moods', 'entrada', 'calendario', 'lista'],
   tecnica: [
     'repo',
     'stack',
@@ -30,7 +30,7 @@ export const SECTIONS = {
     'cola',
     'estado-sync',
   ],
-  diseno: ['tokens', 'ui-kit', 'logo', 'iconos', 'splash', 'panel-tema', 'a11y', 'inputs'],
+  diseno: ['tokens', 'ui-kit', 'logo', 'iconos', 'splash', 'panel-tema', 'a11y', 'inputs', 'micro'],
   graficas: ['heatmap', 'series', 'barras'],
 };
 
