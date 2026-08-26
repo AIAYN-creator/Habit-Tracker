@@ -18,12 +18,26 @@ const TYPES: { value: HabitType; name: string; example: string }[] = [
   { value: 'scale', name: 'Escala', example: 'Del 1 al 5' },
 ];
 
-const FREQUENCIES: { value: Frequency; label: string }[] = [
-  { value: { kind: 'daily' }, label: 'Cada día' },
-  { value: { kind: 'weekly', times: 3 }, label: '3 por semana' },
-  { value: { kind: 'weekdays', days: [1, 2, 3, 4, 5] }, label: 'Entre semana' },
-  { value: { kind: 'none' }, label: 'Sin expectativa' },
-];
+/** ISO: lunes = 1, domingo = 7. */
+const WEEKDAYS = [
+  { iso: 1, label: 'L', name: 'lunes' },
+  { iso: 2, label: 'M', name: 'martes' },
+  { iso: 3, label: 'X', name: 'miércoles' },
+  { iso: 4, label: 'J', name: 'jueves' },
+  { iso: 5, label: 'V', name: 'viernes' },
+  { iso: 6, label: 'S', name: 'sábado' },
+  { iso: 7, label: 'D', name: 'domingo' },
+] as const;
+
+/**
+ * Los siete dias se traducen a los tipos de frecuencia del modelo: todos es
+ * `daily`, ninguno es `none`, y cualquier otra combinacion es `weekdays`.
+ */
+function toFrequency(days: number[]): Frequency {
+  if (days.length === 7) return { kind: 'daily' };
+  if (days.length === 0) return { kind: 'none' };
+  return { kind: 'weekdays', days: [...days].sort((a, b) => a - b) };
+}
 
 export function HabitForm({ onDone }: { onDone: () => void }) {
   const habits = useLiveQuery(() => schema.listActiveHabits(), []);
@@ -32,7 +46,7 @@ export function HabitForm({ onDone }: { onDone: () => void }) {
   const [unit, setUnit] = useState('');
   const [target, setTarget] = useState('');
   const [max, setMax] = useState('5');
-  const [frequency, setFrequency] = useState(0);
+  const [days, setDays] = useState<number[]>([1, 2, 3, 4, 5, 6, 7]);
   const [color, setColor] = useState<string>(PALETTE[0]);
   const [error, setError] = useState<string | undefined>(undefined);
 
@@ -62,7 +76,7 @@ export function HabitForm({ onDone }: { onDone: () => void }) {
         : type === 'scale'
           ? { min: 1, max: upper, step: 1 }
           : {},
-      frequency: FREQUENCIES[frequency]?.value ?? { kind: 'daily' },
+      frequency: toFrequency(days),
       color,
     });
     onDone();
@@ -86,7 +100,7 @@ export function HabitForm({ onDone }: { onDone: () => void }) {
         )}
       </Field>
 
-      <div>
+      <div className={styles.group}>
         <p className={styles.sectionTitle}>Qué se mide</p>
         <div className={styles.types}>
           {TYPES.map((option) => (
@@ -155,26 +169,39 @@ export function HabitForm({ onDone }: { onDone: () => void }) {
         </Field>
       ) : null}
 
-      <div>
-        <p className={styles.sectionTitle}>Cada cuánto</p>
-        <div className={styles.types}>
-          {FREQUENCIES.map((option, index) => (
-            <button
-              key={option.label}
-              type="button"
-              className={styles.type}
-              aria-pressed={frequency === index}
-              onClick={() => {
-                setFrequency(index);
-              }}
-            >
-              <span className={styles.typeName}>{option.label}</span>
-            </button>
-          ))}
+      <div className={styles.group}>
+        <p className={styles.sectionTitle}>Qué días</p>
+        <div className={styles.weekdays}>
+          {WEEKDAYS.map((day) => {
+            const selected = days.includes(day.iso);
+            return (
+              <button
+                key={day.iso}
+                type="button"
+                className={styles.day}
+                aria-pressed={selected}
+                aria-label={day.name}
+                onClick={() => {
+                  setDays((current) =>
+                    selected ? current.filter((iso) => iso !== day.iso) : [...current, day.iso],
+                  );
+                }}
+              >
+                {day.label}
+              </button>
+            );
+          })}
         </div>
+        <p className={styles.dayHint}>
+          {days.length === 7
+            ? 'Todos los días'
+            : days.length === 0
+              ? 'Sin días fijos: se registra cuando toque'
+              : `${String(days.length)} días a la semana`}
+        </p>
       </div>
 
-      <div>
+      <div className={styles.group}>
         <p className={styles.sectionTitle}>Color</p>
         <div className={styles.colors}>
           {PALETTE.map((option) => (
