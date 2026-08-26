@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { DayEntry } from '@/features/entry/DayEntry';
+import { ChartsView } from '@/features/charts/ChartsView';
 import { History } from '@/features/history/History';
 import { HabitForm } from '@/features/schema/HabitForm';
 import { MoodForm } from '@/features/schema/MoodForm';
@@ -14,7 +15,7 @@ import styles from './App.module.css';
  */
 export function App() {
   const [panel, setPanel] = useState<'habits' | 'moods' | 'sync' | null>(null);
-  const [tab, setTab] = useState<'day' | 'history'>('day');
+  const [tab, setTab] = useState<'day' | 'history' | 'charts'>('day');
   const [date, setDate] = useState(todayLocal());
 
   return (
@@ -34,6 +35,8 @@ export function App() {
               setPanel('sync');
             }}
           />
+        ) : tab === 'charts' ? (
+          <ChartsView />
         ) : (
           <History
             onPick={(picked) => {
@@ -63,6 +66,15 @@ export function App() {
           }}
         >
           Historial
+        </Button>
+        <Button
+          variant={tab === 'charts' ? 'primary' : 'ghost'}
+          aria-current={tab === 'charts' ? 'page' : undefined}
+          onClick={() => {
+            setTab('charts');
+          }}
+        >
+          Gráficas
         </Button>
       </nav>
 

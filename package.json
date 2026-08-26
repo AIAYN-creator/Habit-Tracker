@@ -28,6 +28,11 @@
     ]
   },
   "dependencies": {
+    "@visx/axis": "^4.0.0",
+    "@visx/curve": "^4.0.0",
+    "@visx/group": "^4.0.0",
+    "@visx/scale": "^4.0.0",
+    "@visx/shape": "^4.0.0",
     "dexie": "^4.4.5",
     "nanoid": "^6.0.1",
     "react": "^19.2.8",
