@@ -1,6 +1,6 @@
 import { entries, schema, useLiveQuery, type HabitValue, type MoodValue } from '@/data';
 import { formatLongDate, mondayOf, shiftDays, todayLocal } from '@/lib/date';
-import { Button, Heatmap } from '@/ui';
+import { Button, EmptyState, Heatmap } from '@/ui';
 import { HabitControl } from './HabitControl';
 import { MoodControl } from './MoodControl';
 import styles from './DayEntry.module.css';
@@ -105,9 +105,16 @@ export function DayEntry({ date, onDateChange, onManage, onManageMoods, onSync }
         <h2 className={styles.sectionTitle}>Hábitos</h2>
 
         {loading ? null : habits.length === 0 ? (
-          <p className={styles.empty}>
-            Todavía no sigues ningún hábito. Añade el primero aquí abajo.
-          </p>
+          <EmptyState
+            kind="habits"
+            title="Todavía no sigues ningún hábito"
+            hint="Empieza por uno. Siempre puedes añadir más."
+            action={
+              <Button variant="primary" onClick={onManage}>
+                Crear el primero
+              </Button>
+            }
+          />
         ) : (
           habits.map((habit) => (
             <HabitControl
@@ -135,7 +142,11 @@ export function DayEntry({ date, onDateChange, onManage, onManageMoods, onSync }
         <h2 className={styles.sectionTitle}>Estado de ánimo</h2>
 
         {moods === undefined ? null : moods.length === 0 ? (
-          <p className={styles.empty}>Sin dimensiones de ánimo todavía.</p>
+          <EmptyState
+            kind="offline"
+            title="Sin dimensiones de ánimo"
+            hint="Con una basta: cinco caritas y un toque al final del día."
+          />
         ) : (
           moods.map((dimension) => (
             <MoodControl

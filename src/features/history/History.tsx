@@ -10,7 +10,7 @@ import {
   type Habit,
 } from '@/data';
 import { formatLongDate, mondayOf, shiftDays, todayLocal, toLocalDateKey } from '@/lib/date';
-import { Button } from '@/ui';
+import { Button, EmptyState } from '@/ui';
 import styles from './History.module.css';
 
 const WEEKDAYS = ['lun', 'mar', 'mié', 'jue', 'vie', 'sáb', 'dom'];
@@ -181,7 +181,13 @@ function List({
   const sorted = [...days].sort((a, b) => (a.date < b.date ? 1 : -1));
 
   if (sorted.length === 0) {
-    return <p className={styles.empty}>Todavía no hay días registrados.</p>;
+    return (
+      <EmptyState
+        kind="history"
+        title="Todavía no hay días registrados"
+        hint="Lo que registres en Hoy aparecerá aquí."
+      />
+    );
   }
 
   const byId = new Map(habits.map((habit) => [habit.id, habit]));

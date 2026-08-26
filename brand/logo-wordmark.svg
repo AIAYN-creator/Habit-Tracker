@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 96" width="340" height="96" role="img" aria-label="Track Your Way">
+  <title>Track Your Way</title>
+  <g fill="#0d7dd4" opacity="0.28">
+    <rect x="8" y="8" width="22" height="22" rx="5" />
+    <rect x="37" y="8" width="22" height="22" rx="5" />
+    <rect x="8" y="37" width="22" height="22" rx="5" />
+    <rect x="66" y="37" width="22" height="22" rx="5" />
+    <rect x="37" y="66" width="22" height="22" rx="5" />
+    <rect x="66" y="66" width="22" height="22" rx="5" />
+  </g>
+  <g fill="#0d7dd4">
+    <rect x="66" y="8" width="22" height="22" rx="5" />
+    <rect x="37" y="37" width="22" height="22" rx="5" />
+    <rect x="8" y="66" width="22" height="22" rx="5" />
+  </g>
+  <text x="112" y="55" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="30" font-weight="700" fill="#162330">Track Your Way</text>
+  <text x="113" y="76" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#5b6b7b">Hábitos y ánimo, a tu manera</text>
+</svg>
