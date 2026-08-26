@@ -128,10 +128,11 @@ export function createGitHubClient(config: RepoConfig): GitHubClient {
 
       const created = await call<{ commit: { sha: string } }>('/contents/README.md', {
         method: 'PUT',
+        // Sin `branch`: en un repositorio vacio la rama todavia no existe, y
+        // pedirla por nombre falla. GitHub crea la rama por defecto.
         body: JSON.stringify({
           message: 'sync: inicializar el almacen de datos',
           content: toBase64(readme),
-          branch,
         }),
       });
       return created.commit.sha;
