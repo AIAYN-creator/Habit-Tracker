@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { entries, schema, useLiveQuery, type HabitValue } from '@/data';
-import { formatLongDate, shiftDays, todayLocal } from '@/lib/date';
-import { Button, Field, Input } from '@/ui';
+import { formatLongDate, mondayOf, shiftDays, todayLocal } from '@/lib/date';
+import { Button, Field, Heatmap, Input } from '@/ui';
 import { HabitControl } from './HabitControl';
 import styles from './DayEntry.module.css';
 
@@ -19,6 +19,18 @@ export function DayEntry() {
 
   const habits = useLiveQuery(() => schema.listActiveHabits(), []);
   const entry = useLiveQuery(() => entries.get(date), [date]);
+
+  const WEEKS = 18;
+  const from = mondayOf(shiftDays(todayLocal(), -(WEEKS - 1) * 7));
+  const recent = useLiveQuery(() => entries.range(from, todayLocal()), [from]);
+
+  const doneByDate = new Map<string, number>();
+  const registeredDates = new Set<string>();
+  for (const day of recent ?? []) {
+    registeredDates.add(day.date);
+    const done = Object.values(day.habits).filter((value) => value !== false && value !== 0).length;
+    doneByDate.set(day.date, done);
+  }
 
   const isToday = date === todayLocal();
   // useLiveQuery devuelve undefined mientras carga: no es lo mismo que vacio.
@@ -48,39 +60,48 @@ export function DayEntry() {
 
   return (
     <main className={styles.screen}>
-      <header className={styles.header}>
-        <Button
-          size="sm"
-          aria-label="Dia anterior"
-          onClick={() => {
-            setDate(shiftDays(date, -1));
-          }}
-        >
-          ←
-        </Button>
-        <h1 className={styles.date}>{formatLongDate(date)}</h1>
-        {isToday ? null : (
+      <div className={styles.sticky}>
+        <header className={styles.header}>
           <Button
             size="sm"
+            aria-label="Dia anterior"
             onClick={() => {
-              setDate(todayLocal());
+              setDate(shiftDays(date, -1));
             }}
           >
-            Hoy
+            ←
           </Button>
-        )}
-        {/* No se navega al futuro: registrar el jueves que viene no significa nada. */}
-        <Button
-          size="sm"
-          aria-label="Dia siguiente"
-          disabled={isToday}
-          onClick={() => {
-            setDate(shiftDays(date, 1));
-          }}
-        >
-          →
-        </Button>
-      </header>
+          <h1 className={styles.date}>{formatLongDate(date)}</h1>
+          {isToday ? null : (
+            <Button
+              size="sm"
+              onClick={() => {
+                setDate(todayLocal());
+              }}
+            >
+              Hoy
+            </Button>
+          )}
+          {/* No se navega al futuro: registrar el jueves que viene no significa nada. */}
+          <Button
+            size="sm"
+            aria-label="Dia siguiente"
+            disabled={isToday}
+            onClick={() => {
+              setDate(shiftDays(date, 1));
+            }}
+          >
+            →
+          </Button>
+        </header>
+
+        <Heatmap
+          doneByDate={doneByDate}
+          registeredDates={registeredDates}
+          totalHabits={habits?.length ?? 0}
+          weeks={WEEKS}
+        />
+      </div>
 
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>Hábitos</h2>

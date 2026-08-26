@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { fromLocalDateKey, shiftDays, toLocalDateKey, yearOf } from './date';
+import { daysBetween, fromLocalDateKey, mondayOf, shiftDays, toLocalDateKey, yearOf } from './date';
 
 describe('toLocalDateKey', () => {
   it('usa la hora local y no UTC', () => {
@@ -44,5 +44,30 @@ describe('fromLocalDateKey', () => {
 describe('yearOf', () => {
   it('devuelve la carpeta del repo de datos', () => {
     expect(yearOf('2026-08-26')).toBe('2026');
+  });
+});
+
+describe('mondayOf', () => {
+  it('devuelve el mismo dia si ya es lunes', () => {
+    expect(mondayOf('2026-08-24')).toBe('2026-08-24');
+  });
+
+  it('retrocede al lunes desde un miercoles', () => {
+    expect(mondayOf('2026-08-26')).toBe('2026-08-24');
+  });
+
+  it('trata el domingo como final de semana, no como principio', () => {
+    expect(mondayOf('2026-08-30')).toBe('2026-08-24');
+  });
+});
+
+describe('daysBetween', () => {
+  it('cuenta los dias de diferencia', () => {
+    expect(daysBetween('2026-08-24', '2026-08-26')).toBe(2);
+  });
+
+  it('cruza el cambio de horario sin descuadrarse', () => {
+    // El ultimo domingo de octubre atrasa una hora en Europa.
+    expect(daysBetween('2026-10-24', '2026-10-26')).toBe(2);
   });
 });

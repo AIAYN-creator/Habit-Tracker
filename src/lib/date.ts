@@ -45,3 +45,17 @@ export function formatLongDate(key: string, locale = 'es-ES'): string {
     month: 'long',
   }).format(fromLocalDateKey(key));
 }
+
+/** El lunes de la semana de esa fecha. La semana empieza en lunes, como se espera aqui. */
+export function mondayOf(key: string): string {
+  const date = fromLocalDateKey(key);
+  const weekday = (date.getDay() + 6) % 7; // domingo = 6
+  date.setDate(date.getDate() - weekday);
+  return toLocalDateKey(date);
+}
+
+/** Dias entre dos claves, sin contar horas. */
+export function daysBetween(from: string, to: string): number {
+  const ms = fromLocalDateKey(to).getTime() - fromLocalDateKey(from).getTime();
+  return Math.round(ms / 86_400_000);
+}
