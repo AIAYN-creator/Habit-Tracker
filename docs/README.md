@@ -21,6 +21,7 @@ de su tarjeta, que es también el scope de los commits relacionados: `git log --
 | [producto/flujos.md](producto/flujos.md) | Navegación y los cinco flujos de uso, estados no felices incluidos |
 | [producto/habitos.md](producto/habitos.md) | CRUD de hábitos: tipos, frecuencia, archivado y reordenación |
 | [producto/moods.md](producto/moods.md) | CRUD de dimensiones de mood: escalas, tags y notas |
+| [producto/entrada.md](producto/entrada.md) | La pantalla de registro diario, reutilizada por el historial |
 
 ## Técnica
 
@@ -38,6 +39,8 @@ de su tarjeta, que es también el scope de los commits relacionados: `git log --
 | [tecnica/auth-gh.md](tecnica/auth-gh.md) | Token de GitHub: alcance, almacenamiento y caducidad |
 | [tecnica/seed.md](tecnica/seed.md) | Fixtures deterministas de desarrollo y casos límite |
 | [tecnica/sync.md](tecnica/sync.md) | Motor de sincronización: ciclo, cerrojo y pruebas |
+| [tecnica/cola.md](tecnica/cola.md) | Cola offline: rutas, deduplicación y reintentos |
+| [tecnica/estado-sync.md](tecnica/estado-sync.md) | Qué se enseña del estado de sincronización, y con cuánta insistencia |
 
 ## Diseño
 
@@ -76,16 +79,8 @@ node scripts/sync-docs.mjs --vault "../Habit tracker"
 
 ## Deuda anotada
 
-Tres cambios necesarios sobre decisiones ya aprobadas. Cada uno necesita su propia propuesta en el
-tablero; ninguno se ha dado por supuesto en el código.
-
-- **`dexie` necesita una séptima tabla, `syncBase`**, con la última versión sincronizada de cada
-  fichero. Sin ella no hay base para la fusión a tres bandas de [adr/adr-sync.md](adr/adr-sync.md).
-- **`adr-repo` necesita un `settings.json`** donde vivan las preferencias de tema que se
-  sincronizan. Ver [diseno/panel-tema.md](diseno/panel-tema.md).
-- **`modelo` necesita un bloque `display`** en `habits.json` para el tipo de visualización por
-  métrica. Está en el alcance del proyecto, no en el schema aprobado. Ver
-  [adr/charts.md](adr/charts.md).
+Ninguna. Las tres que había —la tabla `syncBase` de `dexie`, el `settings.json` de `adr-repo` y el
+bloque `display` de `modelo`— se propusieron y se aprobaron, y están incorporadas a sus documentos.
 
 ## Decisiones abiertas
 

@@ -21,6 +21,7 @@ entries/
     2026-08-26.json
     2026-08-27.json
   2027/
+settings.json
 meta.json
 README.md
 ```
@@ -45,6 +46,19 @@ concreto no obliga a descargar el año entero.
 Metadatos del propio almacén: versión del formato, fecha de creación e identificadores de los
 dispositivos que han sincronizado. **No contiene datos de hábitos.** Sirve para que la app detecte
 que está hablando con un repo de una versión que no entiende, en lugar de escribir encima.
+
+### `settings.json`
+
+Las preferencias de apariencia que `panel-tema` marca como sincronizables: tema, paleta,
+tipografía y preferencias de visualización por métrica.
+
+**La densidad no entra aquí**, y es el motivo de que este fichero exista aparte en lugar de
+meterse en `meta.json`: la densidad es lo único que legítimamente difiere entre un móvil y un
+monitor de 27 pulgadas, así que se queda en local. Mezclar preferencias que viajan con las que no
+en un mismo fichero obliga a fusionar por clave con reglas distintas dentro del mismo objeto.
+
+Se fusiona con las mismas reglas que los schemas en `adr-sync`: por clave, y last-write-wins sólo
+en las que ambos dispositivos tocaron.
 
 ### `README.md`
 
@@ -112,6 +126,7 @@ constancia.
 ## Criterios de aceptación
 
 - [ ] El repo de datos tiene la estructura de arriba, con `meta.json` y `README.md` escritos.
+- [ ] `settings.json` contiene sólo lo sincronizable, y la densidad no aparece en él.
 - [ ] Un fichero de entrada de ejemplo, válido según `modelo`, commiteado a mano.
 - [ ] Modificar un valor de un día produce un `diff` de una sola línea.
 - [ ] La decisión sobre el historial de borrados está escrita en el README del repo de datos.

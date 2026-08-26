@@ -28,6 +28,7 @@ ADR. Las decisiones de aquí son caras de cambiar más tarde, así que van razon
       "name": "Correr",
       "type": "duration",
       "config": { "unit": "min", "step": 5, "target": 30 },
+      "display": { "chart": "bars" },
       "frequency": { "kind": "weekly", "times": 3 },
       "category": "salud",
       "color": "#e07a5f",
@@ -49,8 +50,33 @@ ADR. Las decisiones de aquí son caras de cambiar más tarde, así que van razon
 | `duration` | minutos, entero ≥ 0 | `step`, `target`, `unit` | barras |
 | `scale` | entero dentro de `[min, max]` | `min`, `max`, `step`, `labels` | línea |
 
+La última columna es el **valor por defecto**, no una imposición: se puede cambiar por métrica con
+el bloque `display`.
+
 `duration` se guarda **siempre en minutos**, aunque la UI muestre "1 h 30". Guardar unidades
 mixtas es la vía rápida a datos incomparables entre sí.
+
+### `display`
+
+El contrato de customización de `charts` promete que el usuario elige cómo se visualiza cada
+métrica. Ese ajuste vive en el schema, junto al hábito, y no en las preferencias globales: es una
+propiedad de la métrica, y debe viajar con ella entre dispositivos.
+
+```json
+"display": { "chart": "bars" }
+```
+
+- `chart`: `heatmap`, `line` o `bars`. **Opcional**: si falta, se usa el valor por defecto de la
+  tabla de arriba. Que sea opcional es lo que hace este cambio compatible hacia atrás, porque los
+  ficheros ya escritos no lo llevan y no necesitan migrarse.
+- No toda combinación tiene sentido, y la UI sólo ofrece las que sí: una escala no se dibuja como
+  heatmap de intensidad porque un 3 sobre 5 no es "más intenso" que un 2, es distinto.
+
+Las preferencias que valen para todas las gráficas a la vez —curva de la línea, rejilla visible,
+radio de las celdas— **no** van aquí: son globales y viven en las preferencias de `panel-tema`.
+La regla para decidir dónde va cada cosa es si tiene sentido responderla por métrica.
+
+Las dimensiones de mood aceptan el mismo bloque, con las mismas reglas.
 
 ### Frecuencia
 
@@ -133,6 +159,7 @@ Qué se considera cambio compatible y qué no:
 | Cambio | Compatible | Qué pasa con el histórico |
 |---|---|---|
 | Renombrar, recolorear, reordenar | Sí | Nada, el `id` no cambia |
+| Cambiar o quitar `display` | Sí | Nada, sólo afecta a cómo se dibuja |
 | Añadir un hábito | Sí | Los días previos quedan sin esa clave: "no registrado" |
 | Archivar un hábito | Sí | Sigue visible en el histórico, fuera del registro diario |
 | Ampliar el rango de una `scale` (1-5 → 1-10) | Sí | Los valores viejos siguen siendo válidos |
@@ -154,6 +181,7 @@ no en rehacer el modelo.
 
 - [ ] Tipos TypeScript derivados de este documento, con los cuatro `type` de hábito y los tres de
       dimensión.
+- [ ] `display` es opcional y un fichero sin él se lee sin migración.
 - [ ] Un fichero de ejemplo válido por cada uno de los tres tipos de fichero.
 - [ ] Queda documentado que ausencia de clave ≠ valor falso.
 - [ ] La tabla de compatibilidad de cambios de schema es la referencia de `validacion`.
