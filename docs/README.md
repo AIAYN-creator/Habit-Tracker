@@ -42,6 +42,7 @@ de su tarjeta, que es también el scope de los commits relacionados: `git log --
 | [tecnica/seed.md](tecnica/seed.md) | Fixtures deterministas de desarrollo y casos límite |
 | [tecnica/sync.md](tecnica/sync.md) | Motor de sincronización: ciclo, cerrojo y pruebas |
 | [tecnica/cola.md](tecnica/cola.md) | Cola offline: rutas, deduplicación y reintentos |
+| [tecnica/qa.md](tecnica/qa.md) | Los veinte escenarios de prueba y los criterios de salida de v1 |
 | [tecnica/estado-sync.md](tecnica/estado-sync.md) | Qué se enseña del estado de sincronización, y con cuánta insistencia |
 
 ## Diseño
