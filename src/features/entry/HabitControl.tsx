@@ -39,6 +39,38 @@ export function HabitControl({ habit, value, onSet, onClear }: Props) {
     );
   }
 
+  if (habit.type === 'scale') {
+    const max = habit.config.max ?? 5;
+    const values = Array.from({ length: max }, (_, index) => index + 1);
+    return (
+      <div className={styles.row} style={style}>
+        <span className={styles.dot} aria-hidden="true" />
+        <span className={styles.name}>{habit.name}</span>
+        <div className={styles.scale} role="radiogroup" aria-label={habit.name}>
+          {values.map((option) => {
+            const selected = value === option;
+            return (
+              <button
+                key={option}
+                type="button"
+                role="radio"
+                aria-checked={selected}
+                className={styles.segment}
+                onClick={() => {
+                  // Volver a tocar lo seleccionado deja el dia sin registrar.
+                  if (selected) onClear();
+                  else onSet(option);
+                }}
+              >
+                {option}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
   const step = habit.config.step ?? 1;
   const current = typeof value === 'number' ? value : 0;
   const unit = habit.config.unit ?? '';
