@@ -1,0 +1,146 @@
+.screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-width: 34rem;
+  margin: 0 auto;
+  padding: var(--space-4) var(--space-4) var(--space-12);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.month {
+  flex: 1;
+  margin: 0;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  text-transform: capitalize;
+}
+
+.toggle {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--space-2);
+}
+
+.weekday {
+  text-align: center;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+}
+
+.day {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  aspect-ratio: 1;
+  min-height: max(40px, calc(46px * var(--density)));
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-text);
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.day:disabled {
+  color: var(--color-text-muted);
+  opacity: 0.4;
+  cursor: default;
+}
+
+.today {
+  border-color: var(--color-text-muted);
+}
+
+/* El anillo: proporcion de lo esperado que se registro. */
+.ring {
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-full);
+  background: conic-gradient(
+    var(--color-accent) calc(var(--ratio) * 360deg),
+    color-mix(in oklch, var(--color-text) 12%, transparent) 0
+  );
+}
+
+.ringEmpty {
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-full);
+  box-shadow: inset 0 0 0 1.5px color-mix(in oklch, var(--color-text) 18%, transparent);
+}
+
+.ringNone {
+  width: 18px;
+  height: 18px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  padding: var(--space-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font: inherit;
+  color: var(--color-text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.itemHead {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.itemDate {
+  font-weight: var(--font-weight-medium);
+  text-transform: capitalize;
+}
+
+.itemSummary {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.itemNote {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  font-style: italic;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.empty {
+  padding: var(--space-8) var(--space-4);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+  text-align: center;
+}

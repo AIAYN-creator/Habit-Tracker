@@ -1,30 +1,71 @@
 import { useState } from 'react';
 import { DayEntry } from '@/features/entry/DayEntry';
+import { History } from '@/features/history/History';
 import { HabitForm } from '@/features/schema/HabitForm';
 import { MoodForm } from '@/features/schema/MoodForm';
 import { SyncPanel } from '@/features/sync/SyncPanel';
-import { Sheet } from '@/ui';
+import { todayLocal } from '@/lib/date';
+import { Button, Sheet } from '@/ui';
+import styles from './App.module.css';
 
 /**
- * `app/` es quien compone: el registro diario y la definicion del schema son
- * dos features distintas y no pueden importarse entre si.
+ * `app/` es quien compone: registro, historial y schema son features distintas
+ * y no pueden importarse entre si. La fecha vive aqui porque la eligen dos.
  */
 export function App() {
   const [panel, setPanel] = useState<'habits' | 'moods' | 'sync' | null>(null);
+  const [tab, setTab] = useState<'day' | 'history'>('day');
+  const [date, setDate] = useState(todayLocal());
 
   return (
-    <>
-      <DayEntry
-        onManage={() => {
-          setPanel('habits');
-        }}
-        onManageMoods={() => {
-          setPanel('moods');
-        }}
-        onSync={() => {
-          setPanel('sync');
-        }}
-      />
+    <div className={styles.app}>
+      <div className={styles.content}>
+        {tab === 'day' ? (
+          <DayEntry
+            date={date}
+            onDateChange={setDate}
+            onManage={() => {
+              setPanel('habits');
+            }}
+            onManageMoods={() => {
+              setPanel('moods');
+            }}
+            onSync={() => {
+              setPanel('sync');
+            }}
+          />
+        ) : (
+          <History
+            onPick={(picked) => {
+              setDate(picked);
+              setTab('day');
+            }}
+          />
+        )}
+      </div>
+
+      <nav className={styles.tabs} aria-label="Secciones">
+        <Button
+          variant={tab === 'day' ? 'primary' : 'ghost'}
+          aria-current={tab === 'day' ? 'page' : undefined}
+          onClick={() => {
+            setTab('day');
+            setDate(todayLocal());
+          }}
+        >
+          Hoy
+        </Button>
+        <Button
+          variant={tab === 'history' ? 'primary' : 'ghost'}
+          aria-current={tab === 'history' ? 'page' : undefined}
+          onClick={() => {
+            setTab('history');
+          }}
+        >
+          Historial
+        </Button>
+      </nav>
+
       <Sheet
         open={panel === 'habits'}
         title="Hábitos"
@@ -39,15 +80,6 @@ export function App() {
         />
       </Sheet>
       <Sheet
-        open={panel === 'sync'}
-        title="Sincronización"
-        onClose={() => {
-          setPanel(null);
-        }}
-      >
-        <SyncPanel />
-      </Sheet>
-      <Sheet
         open={panel === 'moods'}
         title="Estado de ánimo"
         onClose={() => {
@@ -60,6 +92,15 @@ export function App() {
           }}
         />
       </Sheet>
-    </>
+      <Sheet
+        open={panel === 'sync'}
+        title="Sincronización"
+        onClose={() => {
+          setPanel(null);
+        }}
+      >
+        <SyncPanel />
+      </Sheet>
+    </div>
   );
 }

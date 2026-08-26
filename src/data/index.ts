@@ -3,5 +3,6 @@ export * as schema from './schema';
 export { db } from './db';
 export * from './serialize';
 export * from './merge';
+export * from './expectations';
 export { useLiveQuery } from './useLiveQuery';
 export * from './types';
