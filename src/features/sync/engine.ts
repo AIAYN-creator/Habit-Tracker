@@ -36,6 +36,18 @@ const SETTINGS_PATH = 'settings.json';
  */
 const SYNCED_SETTINGS = ['appearance'];
 
+/**
+ * Que ficheros del repositorio son nuestros.
+ *
+ * El resto se ignora por completo: el README que pide adr-repo, un LICENSE,
+ * cualquier cosa que el usuario deje ahi. Sin esto, el motor intentaba parsear
+ * el README como JSON y tumbaba la sincronizacion entera.
+ */
+function isOurs(path: string): boolean {
+  if (path === HABITS_PATH || path === MOODS_PATH || path === SETTINGS_PATH) return true;
+  return /^entries\/\d{4}\/\d{4}-\d{2}-\d{2}\.json$/.test(path);
+}
+
 export interface SyncReport {
   pulled: number;
   pushed: number;
@@ -74,6 +86,7 @@ async function run(client: GitHubClient): Promise<SyncReport> {
   if (head !== null && head !== lastSeen) {
     const files = await client.listFiles(head);
     for (const file of files) {
+      if (!isOurs(file.path)) continue;
       const base = await db.syncBase.get(file.path);
       if (base?.content !== undefined && base.sha === file.sha) continue;
       const remote = await client.readBlob(file.sha);
