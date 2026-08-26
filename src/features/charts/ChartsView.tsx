@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { entries, schema, useLiveQuery } from '@/data';
 import { daysBetween, shiftDays, todayLocal } from '@/lib/date';
-import { Bars, Button, Series, type Point } from '@/ui';
+import { Bars, Button, EmptyState, Series, type Point } from '@/ui';
 import { bucketize, groupingFor, groupingLabel, targetFactor } from './bucketing';
 import styles from './ChartsView.module.css';
 
@@ -76,9 +76,11 @@ export function ChartsView() {
       </div>
 
       {nothing ? (
-        <p className={styles.empty}>
-          Aquí aparecerán las gráficas de tus contadores, duraciones y escalas.
-        </p>
+        <EmptyState
+          kind="chart"
+          title="Aún no hay nada que dibujar"
+          hint="Las gráficas salen de los contadores, las duraciones y las escalas."
+        />
       ) : null}
 
       {numeric.map((habit) => (

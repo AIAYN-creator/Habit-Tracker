@@ -11,6 +11,7 @@ import { ThemePanel } from '@/features/theme/ThemePanel';
 import { applyAppearance, applyDensity, readAppearance } from '@/features/theme/theme';
 import { db, useLiveQuery } from '@/data';
 import { todayLocal } from '@/lib/date';
+import { CalendarDays, ChartColumn, Palette, SquareCheckBig } from 'lucide-react';
 import { Button, Sheet } from '@/ui';
 import styles from './App.module.css';
 
@@ -84,6 +85,7 @@ export function App() {
             setDate(todayLocal());
           }}
         >
+          <SquareCheckBig size={16} aria-hidden="true" />
           Hoy
         </Button>
         <Button
@@ -93,6 +95,7 @@ export function App() {
             setTab('history');
           }}
         >
+          <CalendarDays size={16} aria-hidden="true" />
           Historial
         </Button>
         <Button
@@ -102,6 +105,7 @@ export function App() {
             setTab('charts');
           }}
         >
+          <ChartColumn size={16} aria-hidden="true" />
           Gráficas
         </Button>
         <Button
@@ -111,7 +115,7 @@ export function App() {
             setPanel('theme');
           }}
         >
-          Aa
+          <Palette size={16} aria-hidden="true" />
         </Button>
       </nav>
 

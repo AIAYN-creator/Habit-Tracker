@@ -64,6 +64,44 @@ async function ogImage(source) {
     .toBuffer();
 }
 
+/**
+ * Pantallas de arranque de iOS. Ver docs/diseno/splash.md.
+ *
+ * La lista de dispositivos es un unico array del que salen **tanto las
+ * imagenes como las etiquetas**: no pueden divergir, y añadir un dispositivo
+ * es una linea. Es la mitigacion de haber dejado pwa-asset-generator, que
+ * conocia la lista pero arrastraba Chromium entero.
+ */
+const SPLASH = [
+  { w: 1290, h: 2796, ratio: 3, device: 430, deviceH: 932 },
+  { w: 1179, h: 2556, ratio: 3, device: 393, deviceH: 852 },
+  { w: 1170, h: 2532, ratio: 3, device: 390, deviceH: 844 },
+  { w: 1125, h: 2436, ratio: 3, device: 375, deviceH: 812 },
+  { w: 828, h: 1792, ratio: 2, device: 414, deviceH: 896 },
+  { w: 750, h: 1334, ratio: 2, device: 375, deviceH: 667 },
+  { w: 1536, h: 2048, ratio: 2, device: 768, deviceH: 1024 },
+];
+
+async function splash({ w, h }, source) {
+  const size = Math.round(Math.min(w, h) * 0.28);
+  const symbolPng = await sharp(source, { density: 512 }).resize(size, size).png().toBuffer();
+  return sharp({ create: { width: w, height: h, channels: 4, background: BRAND_INK } })
+    .composite([{ input: symbolPng, gravity: 'centre' }])
+    .png()
+    .toBuffer();
+}
+
+/** Las etiquetas salen del mismo array que las imagenes. */
+function splashTags() {
+  return SPLASH.map(
+    ({ w, h, ratio, device, deviceH }) =>
+      `    <link rel="apple-touch-startup-image" href="/splash-${w}x${h}.png" ` +
+      `media="(device-width: ${device}px) and (device-height: ${deviceH}px) ` +
+      `and (-webkit-device-pixel-ratio: ${ratio}) and (orientation: portrait)" />`,
+  ).join(`
+`);
+}
+
 const source = await readFile('brand/logo.svg');
 await mkdir(OUT, { recursive: true });
 
@@ -80,7 +118,27 @@ for (const [name, buffer] of outputs) {
   await writeFile(`${OUT}/${name}`, buffer);
 }
 
+for (const device of SPLASH) {
+  await writeFile(`${OUT}/splash-${device.w}x${device.h}.png`, await splash(device, source));
+}
+
+// Las etiquetas se escriben en index.html entre marcas, para que regenerar no
+// obligue a tocar el HTML a mano y no puedan quedarse desincronizadas.
+const html = await readFile('index.html', 'utf8');
+const start = '<!-- splash:start -->';
+const end = '<!-- splash:end -->';
+if (html.includes(start) && html.includes(end)) {
+  const before = html.slice(0, html.indexOf(start) + start.length);
+  const after = html.slice(html.indexOf(end));
+  await writeFile(
+    'index.html',
+    [before, splashTags(), after].join(`
+`),
+    'utf8',
+  );
+}
+
 await writeFile(`${OUT}/favicon.svg`, source);
 await writeFile(`${OUT}/favicon.ico`, await pngToIco([`${OUT}/favicon-32.png`]));
 
-console.log(`${outputs.length + 2} ficheros generados en ${OUT}/`);
+console.log(`${outputs.length + 2 + SPLASH.length} ficheros generados en ${OUT}/`);
