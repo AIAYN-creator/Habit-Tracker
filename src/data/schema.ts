@@ -88,6 +88,14 @@ export async function createMood(draft: Draft<MoodDimension>): Promise<MoodDimen
   return dimension;
 }
 
+export async function updateMood(id: string, patch: Partial<Draft<MoodDimension>>): Promise<void> {
+  const now = nowIso();
+  await db.transaction('rw', db.moodDimensions, db.outbox, async () => {
+    await db.moodDimensions.update(id, { ...patch, updatedAt: now });
+    await enqueue(SCHEMA_PATH.moods, now);
+  });
+}
+
 export async function archiveMood(id: string): Promise<void> {
   const now = nowIso();
   await db.transaction('rw', db.moodDimensions, db.outbox, async () => {

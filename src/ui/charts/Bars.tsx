@@ -1,4 +1,5 @@
 import { AxisBottom, AxisLeft } from '@visx/axis';
+import { GridRows } from '@visx/grid';
 import { Group } from '@visx/group';
 import { scaleBand, scaleLinear } from '@visx/scale';
 import { Bar } from '@visx/shape';
@@ -22,6 +23,7 @@ interface Props {
   target?: number;
   unit?: string;
   grouping: string;
+  grid?: boolean;
 }
 
 /**
@@ -31,7 +33,7 @@ interface Props {
  * suspender, y el verde y el rojo en una app de seguimiento personal
  * envejecen mal. Solo el color del habito, pleno o atenuado.
  */
-export function Bars({ title, buckets, color, target, unit, grouping }: Props) {
+export function Bars({ title, buckets, color, target, unit, grouping, grid }: Props) {
   const empty = buckets.every((bucket) => bucket.value === 0);
   const format = unit === 'min' ? formatDuration : (value: number) => String(value);
 
@@ -73,6 +75,9 @@ export function Bars({ title, buckets, color, target, unit, grouping }: Props) {
 
         return (
           <Group left={MARGIN.left} top={MARGIN.top}>
+            {grid ? (
+              <GridRows scale={y} width={innerWidth} numTicks={3} stroke="var(--color-border)" />
+            ) : null}
             <AxisLeft
               scale={y}
               numTicks={3}

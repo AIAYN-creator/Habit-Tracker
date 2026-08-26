@@ -131,6 +131,24 @@ describe('sync', () => {
     expect(a).toBe(b);
   });
 
+  it('sube las preferencias de tema pero jamas el token', async () => {
+    await db.settings.put({ key: 'github', value: { owner: 'x', repo: 'y', token: 'SECRETO' } });
+    await db.settings.put({ key: 'appearance', value: { accent: '#e07a5f' } });
+    await db.settings.put({ key: 'density', value: 'compact' });
+    await db.outbox.add({ path: 'settings.json', createdAt: new Date().toISOString() });
+    const client = fakeClient();
+
+    await sync(client);
+
+    const files = vi.mocked(client.push).mock.calls[0]?.[0].files ?? [];
+    const settings = files.find((file) => file.path === 'settings.json');
+    expect(settings?.content).toContain('#e07a5f');
+    // Subir el token a un repositorio seria regalarlo.
+    expect(settings?.content).not.toContain('SECRETO');
+    // La densidad es de este dispositivo y no viaja.
+    expect(settings?.content).not.toContain('compact');
+  });
+
   it('empuja tambien el schema al crear un habito', async () => {
     await schema.createHabit({
       name: 'Correr',

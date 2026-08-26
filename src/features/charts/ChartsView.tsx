@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { entries, schema, useLiveQuery } from '@/data';
+import { db, entries, readAppearance, schema, useLiveQuery } from '@/data';
 import { daysBetween, shiftDays, todayLocal } from '@/lib/date';
 import { Bars, Button, EmptyState, Series, type Point } from '@/ui';
 import { bucketize, groupingFor, groupingLabel, targetFactor } from './bucketing';
@@ -19,6 +19,8 @@ export function ChartsView() {
   const habits = useLiveQuery(() => schema.listActiveHabits(), []);
   const moods = useLiveQuery(() => schema.listActiveMoods(), []);
   const oldest = useLiveQuery(() => entries.firstDate(), []);
+  const stored = useLiveQuery(() => db.settings.get('appearance'), []);
+  const prefs = readAppearance(stored?.value);
 
   const to = todayLocal();
   // Con "Todo", el rango arranca en el primer dia registrado. Sin datos
@@ -48,10 +50,16 @@ export function ChartsView() {
     return values;
   };
 
+  // El tipo elegido por metrica manda sobre el defecto de su tipo de dato.
+  const chartFor = (item: { type: string; display?: { chart?: string } }) =>
+    item.display?.chart ?? (item.type === 'scale' ? 'line' : 'bars');
+
   const numeric = (habits ?? []).filter(
-    (habit) => habit.type === 'counter' || habit.type === 'duration',
+    (habit) => habit.type !== 'boolean' && habit.type !== 'scale' && chartFor(habit) === 'bars',
   );
-  const scales = (habits ?? []).filter((habit) => habit.type === 'scale');
+  const scales = (habits ?? []).filter(
+    (habit) => habit.type !== 'boolean' && chartFor(habit) === 'line',
+  );
   const moodScales = (moods ?? []).filter((dimension) => dimension.type === 'scale');
   const nothing = numeric.length + scales.length + moodScales.length === 0;
 
@@ -90,6 +98,7 @@ export function ChartsView() {
           color={habit.color}
           unit={habit.config.unit}
           grouping={groupingLabel(grouping)}
+          grid={prefs.chartGrid}
           target={
             habit.config.target === undefined
               ? undefined
@@ -104,8 +113,10 @@ export function ChartsView() {
           key={habit.id}
           title={habit.name}
           color={habit.color}
-          min={habit.config.min ?? 1}
-          max={habit.config.max ?? 5}
+          min={habit.config.min ?? 0}
+          max={habit.config.max ?? (habit.type === 'scale' ? 5 : 60)}
+          curve={prefs.chartCurve}
+          grid={prefs.chartGrid}
           points={series('habits', habit.id)}
         />
       ))}
@@ -122,6 +133,8 @@ export function ChartsView() {
               ? [dimension.config.labels[0] ?? '', dimension.config.labels[1] ?? '']
               : undefined
           }
+          curve={prefs.chartCurve}
+          grid={prefs.chartGrid}
           points={series('moods', dimension.id)}
         />
       ))}

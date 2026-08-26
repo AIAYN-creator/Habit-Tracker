@@ -1,4 +1,4 @@
-import { db } from '@/data';
+import type { Appearance, Density } from '@/data';
 
 /**
  * Aplicar el tema es reescribir variables en el elemento raiz: sin
@@ -6,30 +6,13 @@ import { db } from '@/data';
  * Ver docs/diseno/panel-tema.md.
  */
 
-export interface Appearance {
-  /** Ausencia de valor significa seguir al sistema. */
-  theme: 'light' | 'dark' | 'system';
-  accent: string;
-  font: 'sans' | 'serif' | 'mono';
-  motion: boolean;
-}
-
-export const DEFAULT_APPEARANCE: Appearance = {
-  theme: 'system',
-  accent: '#0d7dd4',
-  font: 'sans',
-  motion: true,
-};
-
-/** La densidad es lo unico que difiere legitimamente entre un movil y un monitor. */
-export type Density = 'comfortable' | 'compact';
-
 export function applyAppearance(appearance: Appearance): void {
   const root = document.documentElement;
   if (appearance.theme === 'system') root.removeAttribute('data-theme');
   else root.setAttribute('data-theme', appearance.theme);
 
   root.style.setProperty('--color-accent', appearance.accent);
+  root.style.setProperty('--radius-sm', appearance.cellRadius === 'sharp' ? '0px' : '4px');
   root.style.setProperty('--font-family', `var(--font-${appearance.font})`);
   if (appearance.motion) {
     root.style.removeProperty('--duration-fast');
@@ -51,20 +34,4 @@ export function applyAppearance(appearance: Appearance): void {
 
 export function applyDensity(density: Density): void {
   document.documentElement.setAttribute('data-density', density);
-}
-
-export function readAppearance(value: unknown): Appearance {
-  if (value === null || typeof value !== 'object') return DEFAULT_APPEARANCE;
-  return { ...DEFAULT_APPEARANCE, ...(value as Partial<Appearance>) };
-}
-
-export async function saveAppearance(appearance: Appearance): Promise<void> {
-  // Va en settings, que es lo que viaja entre dispositivos.
-  await db.settings.put({ key: 'appearance', value: appearance });
-}
-
-export async function saveDensity(density: Density): Promise<void> {
-  // Aparte y sin sincronizar: imponer al iPad la densidad del escritorio
-  // seria un fastidio, no una funcionalidad.
-  await db.settings.put({ key: 'density', value: density });
 }
