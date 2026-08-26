@@ -111,5 +111,7 @@ export interface SettingRow {
 export interface SyncBaseRow {
   path: string;
   content: string;
+  /** SHA del blob remoto, para saltarse la descarga si no cambio. */
+  sha?: string;
   syncedAt: Timestamp;
 }
