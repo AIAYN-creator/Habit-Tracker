@@ -1,10 +1,25 @@
 .screen {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
   max-width: 34rem;
   margin: 0 auto;
-  padding: var(--space-6) var(--space-4) var(--space-12);
+  padding: 0 var(--space-4) var(--space-12);
+}
+
+/*
+ * El heatmap es lo importante de la pantalla, asi que no se va con el scroll:
+ * la lista de habitos pasa por debajo. Ver docs/graficas/heatmap.md.
+ */
+.sticky {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4) 0 var(--space-3);
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .header {
@@ -26,6 +41,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
+  padding-top: var(--space-4);
 }
 
 .sectionTitle {
