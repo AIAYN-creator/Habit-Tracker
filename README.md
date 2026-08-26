@@ -83,6 +83,11 @@ Tablero configurable con widgets reordenables. Ver
 - **Empaquetado de escritorio**, previsiblemente con Tauri antes que Electron: unos pocos MB
   frente a más de cien, y acceso al almacén de credenciales del sistema, que es la respuesta real
   al riesgo de guardar el token en un navegador.
+- **Correlaciones entre métricas.** Superponer un hábito y una dimensión de ánimo en la misma
+  gráfica —gimnasio contra ánimo social, leer contra ánimo académico— para ver si hay relación.
+  `vision` lo dejó fuera de v1 por una razón que sigue en pie: necesita meses de datos reales
+  para decir algo, y antes de tenerlos no hay criterio para saber qué correlación merece la pena
+  mostrar. Con un año de uso, sí.
 - **Interfaz en español e inglés.** Hoy los textos están escritos directamente en el código; hace
   falta extraerlos y añadir una capa de traducción. Las fechas ya salen de `Intl`, así que esa
   parte está resuelta de nacimiento.
