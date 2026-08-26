@@ -1,12 +1,3 @@
----
-description: 'Organización de los JSON en el repo privado de GitHub: carpetas por
-  año, naming y monorepo de datos.'
-sources: []
-estimated_duration_hours: null
-actual_duration_hours: null
-assigned_to: agent
-status_note: null
----
 # ADR: estructura del repo de datos
 
 **Estado:** propuesto, pendiente de firma

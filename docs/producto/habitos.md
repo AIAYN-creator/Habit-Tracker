@@ -1,12 +1,3 @@
----
-description: Crear, editar, reordenar y archivar hábitos con su tipo, frecuencia y
-  color desde la UI.
-sources: []
-estimated_duration_hours: null
-actual_duration_hours: null
-assigned_to: agent
-status_note: null
----
 # CRUD de hábitos
 
 Pantalla de Ajustes → Hábitos. Se usa una vez a la semana como mucho, así que prioriza claridad

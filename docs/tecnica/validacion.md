@@ -1,12 +1,3 @@
----
-description: Validación con zod y compatibilidad de entradas existentes al editar
-  un schema.
-sources: []
-estimated_duration_hours: null
-actual_duration_hours: null
-assigned_to: agent
-status_note: null
----
 # Validación de schema
 
 Dos trabajos distintos que conviene no mezclar: **validar** lo que entra de fuera y **decidir** si

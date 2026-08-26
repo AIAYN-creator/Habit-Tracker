@@ -1,12 +1,3 @@
----
-description: Personal Access Token de grano fino acotado al repo de datos; el device
-  flow queda descartado por CORS.
-sources: []
-estimated_duration_hours: null
-actual_duration_hours: null
-assigned_to: agent
-status_note: null
----
 # Auth con GitHub
 
 Token de acceso personal de grano fino. El device flow queda descartado: su endpoint de canje no

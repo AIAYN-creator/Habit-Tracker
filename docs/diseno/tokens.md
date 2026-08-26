@@ -1,12 +1,3 @@
----
-description: CSS variables para paleta, tipografía, escala de espaciado y densidad
-  de UI.
-sources: []
-estimated_duration_hours: null
-actual_duration_hours: null
-assigned_to: agent
-status_note: null
----
 # Design tokens
 
 Si la customización es el producto, los tokens no son una capa de estilo: son la API pública del

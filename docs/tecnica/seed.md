@@ -1,11 +1,3 @@
----
-description: Datos de ejemplo realistas para desarrollar y probar las visualizaciones.
-sources: []
-estimated_duration_hours: null
-actual_duration_hours: null
-assigned_to: agent
-status_note: null
----
 # Fixtures de desarrollo
 
 Datos sintéticos para desarrollar y probar. Con la base vacía no se puede diseñar un heatmap, y

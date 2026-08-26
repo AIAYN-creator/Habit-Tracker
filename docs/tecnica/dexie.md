@@ -1,11 +1,3 @@
----
-description: 'Dexie: definición de tablas, índices y versionado del esquema local.'
-sources: []
-estimated_duration_hours: null
-actual_duration_hours: null
-assigned_to: agent
-status_note: null
----
 # Setup de IndexedDB
 
 IndexedDB es la fuente de verdad del dispositivo. Los JSON del repo de GitHub son una

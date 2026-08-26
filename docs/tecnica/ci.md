@@ -1,11 +1,3 @@
----
-description: 'GitHub Actions: lint, test y build; despliegue de la PWA a GitHub Pages.'
-sources: []
-estimated_duration_hours: null
-actual_duration_hours: null
-assigned_to: agent
-status_note: null
----
 # CI y despliegue
 
 Dos flujos de trabajo separados, porque tienen disparadores y permisos distintos y mezclarlos
