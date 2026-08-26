@@ -1,3 +1,11 @@
+---
+description: Alta rápida diaria, edición de schema y navegación del historial.
+sources: []
+estimated_duration_hours: null
+actual_duration_hours: null
+assigned_to: agent
+status_note: null
+---
 # Flujos de UX
 
 El criterio de éxito de `vision` —registrar el día completo en menos de treinta segundos— no se

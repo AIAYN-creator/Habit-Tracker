@@ -1,3 +1,11 @@
+---
+description: Definición de schemas/habits.json, schemas/moods.json y entries/YYYY-MM-DD.json.
+sources: []
+estimated_duration_hours: null
+actual_duration_hours: null
+assigned_to: agent
+status_note: null
+---
 # Modelo de datos schema-driven
 
 Este es el documento del que cuelga casi todo: persistencia local, serialización, sync y los dos

@@ -1,3 +1,11 @@
+---
+description: Iconos de instalación, splash screens y theme-color para móvil.
+sources: []
+estimated_duration_hours: null
+actual_duration_hours: null
+assigned_to: agent
+status_note: null
+---
 # Assets de PWA
 
 Todo lo que el sistema operativo necesita para que la app instalada no parezca una página web con
@@ -15,15 +23,15 @@ funcione en la máquina de turno.
 
 ## Inventario
 
-| Fichero                 | Tamaño    | Para qué                               |
-| ----------------------- | --------- | -------------------------------------- |
-| `favicon.svg`           | vectorial | Navegadores modernos                   |
-| `favicon.ico`           | 32        | Respaldo                               |
-| `apple-touch-icon.png`  | 180       | iOS, obligatorio: el manifest no basta |
-| `icon-192.png`          | 192       | Manifest                               |
-| `icon-512.png`          | 512       | Manifest y splash de Android           |
-| `icon-maskable-512.png` | 512       | Manifest, con zona de seguridad        |
-| `apple-splash-*.png`    | varios    | Pantallas de arranque de iOS           |
+| Fichero | Tamaño | Para qué |
+|---|---|---|
+| `favicon.svg` | vectorial | Navegadores modernos |
+| `favicon.ico` | 32 | Respaldo |
+| `apple-touch-icon.png` | 180 | iOS, obligatorio: el manifest no basta |
+| `icon-192.png` | 192 | Manifest |
+| `icon-512.png` | 512 | Manifest y splash de Android |
+| `icon-maskable-512.png` | 512 | Manifest, con zona de seguridad |
+| `apple-splash-*.png` | varios | Pantallas de arranque de iOS |
 
 ### El icono maskable no es el icono normal
 

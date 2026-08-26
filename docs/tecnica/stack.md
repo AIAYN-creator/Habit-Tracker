@@ -1,3 +1,12 @@
+---
+description: Vite + React + TypeScript, estructura de carpetas, alias de importación
+  y scripts base.
+sources: []
+estimated_duration_hours: null
+actual_duration_hours: null
+assigned_to: agent
+status_note: null
+---
 # Stack y estructura del proyecto
 
 ## Stack

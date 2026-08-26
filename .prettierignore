@@ -1,3 +1,7 @@
 dist
 coverage
 node_modules
+
+# Espejo del tablero de Histos: byte a byte igual que content/*.md del vault.
+# Si Prettier lo reformatea, sync-docs.mjs marca diferencias en cada ejecucion.
+docs

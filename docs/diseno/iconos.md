@@ -1,3 +1,11 @@
+---
+description: Set de iconos propio e ilustraciones para estados vacíos.
+sources: []
+estimated_duration_hours: null
+actual_duration_hours: null
+assigned_to: agent
+status_note: null
+---
 # Iconos e ilustraciones
 
 ## Decisión: base de terceros para los iconos, dibujo propio para las ilustraciones
@@ -28,12 +36,12 @@ sincronización con el repo.
 
 Cuatro, las que `flujos` declara necesarias:
 
-| Estado                     | Qué transmite                                |
-| -------------------------- | -------------------------------------------- |
-| Sin hábitos                | Invitación a crear el primero, no un error   |
-| Sin datos para una gráfica | Paciencia: "vuelve dentro de unos días"      |
-| Historial vacío            | Igual que el anterior, en tono de calendario |
-| Sin conexión               | Tranquilidad: todo sigue funcionando         |
+| Estado | Qué transmite |
+|---|---|
+| Sin hábitos | Invitación a crear el primero, no un error |
+| Sin datos para una gráfica | Paciencia: "vuelve dentro de unos días" |
+| Historial vacío | Igual que el anterior, en tono de calendario |
+| Sin conexión | Tranquilidad: todo sigue funcionando |
 
 Aquí sí se dibuja desde cero, y con una regla que las mantiene coherentes: **el mismo lenguaje
 geométrico del logo**. Si `logo` se resuelve con la retícula de celdas, las ilustraciones son

@@ -1,3 +1,11 @@
+---
+description: Decidir entre D3/visx (control visual) y Recharts (velocidad de desarrollo).
+sources: []
+estimated_duration_hours: null
+actual_duration_hours: null
+assigned_to: agent
+status_note: null
+---
 # ADR: librería de gráficas
 
 **Estado:** propuesto (segunda versión), pendiente de firma

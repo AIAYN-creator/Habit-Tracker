@@ -1,3 +1,12 @@
+---
+description: Edición en runtime de paleta, tipografía, densidad y color por hábito
+  o categoría.
+sources: []
+estimated_duration_hours: null
+actual_duration_hours: null
+assigned_to: agent
+status_note: null
+---
 # Panel de customización
 
 Aquí es donde el diferenciador de `vision` deja de ser una propiedad del código y se convierte en
@@ -65,10 +74,10 @@ elige claro u oscuro según la luminosidad del color, nunca se deja a la suerte.
 
 En la tabla `settings` de `dexie`. Y una distinción que evita un fastidio real:
 
-| Preferencia                                       | Ámbito                               |
-| ------------------------------------------------- | ------------------------------------ |
+| Preferencia | Ámbito |
+|---|---|
 | Tema, paleta, tipografía, preferencias de gráfica | **Se sincroniza** entre dispositivos |
-| Densidad                                          | **Por dispositivo**                  |
+| Densidad | **Por dispositivo** |
 
 La densidad es lo único que legítimamente difiere entre un móvil y un monitor de 27 pulgadas.
 Sincronizarla sería imponer al iPad la elección hecha en el escritorio.

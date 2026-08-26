@@ -1,3 +1,13 @@
+---
+description: Pull+merge+push con fusion a tres bandas por fichero de dia (base = ultima
+  version sincronizada); LWW por timestamp solo en las claves que ambos dispositivos
+  tocaron.
+sources: []
+estimated_duration_hours: null
+actual_duration_hours: null
+assigned_to: agent
+status_note: null
+---
 # ADR: sincronización y conflictos
 
 **Estado:** propuesto, pendiente de firma
@@ -40,15 +50,15 @@ remoto  = versión en GitHub ahora
 
 Para cada clave del objeto —cada hábito, cada dimensión de mood, la nota—:
 
-| Situación                            | Resultado                                |
-| ------------------------------------ | ---------------------------------------- |
-| Sólo cambió en local                 | Gana local                               |
-| Sólo cambió en remoto                | Gana remoto                              |
-| Cambió en ambos, al mismo valor      | Sin conflicto                            |
+| Situación | Resultado |
+|---|---|
+| Sólo cambió en local | Gana local |
+| Sólo cambió en remoto | Gana remoto |
+| Cambió en ambos, al mismo valor | Sin conflicto |
 | Cambió en ambos, a valores distintos | **LWW por el `updatedAt` de la entrada** |
 
 En el ejemplo de arriba, el móvil tocó `h_run` y el iPad tocó `h_read`: conjuntos disjuntos, se
-quedan los dos. El LWW sólo entra en juego cuando ambos dispositivos tocaron _la misma clave_,
+quedan los dos. El LWW sólo entra en juego cuando ambos dispositivos tocaron *la misma clave*,
 que sí es un caso raro.
 
 ### Nada se pierde en silencio
@@ -105,13 +115,13 @@ aviso.
 
 ## Errores
 
-| Error                        | Respuesta                                                       |
-| ---------------------------- | --------------------------------------------------------------- |
-| 401 / 403 por token          | Aviso persistente en Ajustes; la app sigue funcionando en local |
-| 403 por límite de peticiones | Espera hasta la ventana siguiente; no debería ocurrir nunca     |
-| 409 en la referencia         | Traer, fusionar y reintentar, hasta tres veces                  |
-| Red caída                    | A la cola, con reintentos espaciados                            |
-| JSON remoto ilegible         | No se toca ese fichero, se avisa y se sigue con el resto        |
+| Error | Respuesta |
+|---|---|
+| 401 / 403 por token | Aviso persistente en Ajustes; la app sigue funcionando en local |
+| 403 por límite de peticiones | Espera hasta la ventana siguiente; no debería ocurrir nunca |
+| 409 en la referencia | Traer, fusionar y reintentar, hasta tres veces |
+| Red caída | A la cola, con reintentos espaciados |
+| JSON remoto ilegible | No se toca ese fichero, se avisa y se sigue con el resto |
 
 ## Criterios de aceptación
 

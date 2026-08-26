@@ -1,3 +1,12 @@
+---
+description: Diferenciador (GUI y customización), principios local-first y schema-driven,
+  y qué queda fuera de v1.
+sources: []
+estimated_duration_hours: null
+actual_duration_hours: null
+assigned_to: agent
+status_note: null
+---
 # Visión, principios y alcance
 
 ## Qué es

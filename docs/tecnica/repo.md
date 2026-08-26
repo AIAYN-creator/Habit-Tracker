@@ -1,3 +1,12 @@
+---
+description: 'Inicializar el repositorio: licencia, README inicial, .gitignore y convención
+  de commits.'
+sources: []
+estimated_duration_hours: null
+actual_duration_hours: null
+assigned_to: agent
+status_note: null
+---
 # Repo, licencia y convenciones
 
 ## Repositorio

@@ -1,3 +1,11 @@
+---
+description: ESLint, Prettier, Vitest y hook de pre-commit.
+sources: []
+estimated_duration_hours: null
+actual_duration_hours: null
+assigned_to: agent
+status_note: null
+---
 # Tooling de calidad
 
 Con un solo desarrollador, el tooling no está para arbitrar discusiones de estilo: está para que
