@@ -45,6 +45,12 @@ paleta entera de la app y la marca no se va con ella.
 
 Desarrollados en [docs/producto/vision.md](docs/producto/vision.md).
 
+## Documentación
+
+- **[GUIA.md](GUIA.md)** — cómo usarla: token, sincronización, recuperar datos.
+- **[QA.md](QA.md)** — los veinte escenarios de prueba y los criterios de salida de v1.
+- **[docs/](docs/README.md)** — las 41 decisiones aprobadas del tablero.
+
 ## Estado
 
 En desarrollo, v1 sin publicar. Lo que hay hoy es el andamiaje: proyecto, calidad, despliegue
