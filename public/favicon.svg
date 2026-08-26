@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" width="96" height="96" role="img" aria-label="Habit Tracker">
+  <title>Habit Tracker</title>
+  <!--
+    Marca provisional. Direccion aprobada en docs/diseno/logo.md: la reticula
+    que cita al heatmap. La diagonal ascendente son los dias cumplidos; el
+    resto, la cuadricula del ano. Colores: los tokens de marca de tokens.css,
+    convertidos a sRGB. No usa ningun token de tema: el usuario puede cambiar
+    la paleta de la app y la marca no debe irse con ella. Las celdas apagadas
+    van en acento al 28% y no en tinta, para que sigan viendose sobre fondo
+    oscuro.
+  -->
+  <g fill="#0d7dd4" opacity="0.28">
+    <rect x="8" y="8" width="22" height="22" rx="5" />
+    <rect x="37" y="8" width="22" height="22" rx="5" />
+    <rect x="8" y="37" width="22" height="22" rx="5" />
+    <rect x="66" y="37" width="22" height="22" rx="5" />
+    <rect x="37" y="66" width="22" height="22" rx="5" />
+    <rect x="66" y="66" width="22" height="22" rx="5" />
+  </g>
+  <g fill="#0d7dd4">
+    <rect x="66" y="8" width="22" height="22" rx="5" />
+    <rect x="37" y="37" width="22" height="22" rx="5" />
+    <rect x="8" y="66" width="22" height="22" rx="5" />
+  </g>
+</svg>

@@ -1,4 +1,12 @@
-# Habit Tracker
+<p align="center">
+  <img src="brand/logo.svg" alt="" width="96" height="96" />
+</p>
+
+<h1 align="center">Habit Tracker</h1>
+
+<p align="center">
+  <em>Marca provisional: la dirección está aprobada, el nombre todavía no.</em>
+</p>
 
 [![ci](https://github.com/AIAYN-creator/Habit-Tracker/actions/workflows/ci.yml/badge.svg)](https://github.com/AIAYN-creator/Habit-Tracker/actions/workflows/ci.yml)
 
@@ -9,6 +17,23 @@ servidor, sin base de datos gestionada, sin cuenta que crear.
 **En vivo:** <https://aiayn-creator.github.io/Habit-Tracker/>
 
 > Captura pendiente: se añade cuando haya interfaz de verdad.
+
+## Marca
+
+El símbolo es la retícula del heatmap con la diagonal de días cumplidos encendida. Vive en
+[`brand/`](brand/) y de ahí salen todos los derivados —favicon, iconos de instalación e imagen de
+preview— con un solo comando:
+
+```bash
+npm run icons
+```
+
+Es **provisional** por una razón concreta: `Habit Tracker` describe la categoría, no el producto,
+y el nombre condiciona el logotipo. Cuando haya nombre se rehace el SVG maestro y se regenera todo
+sin tocar nada más. Ver [diseno/logo.md](docs/diseno/logo.md).
+
+Los colores de marca son tokens propios, separados de los del tema: el usuario puede cambiar la
+paleta entera de la app y la marca no se va con ella.
 
 ## Principios
 
