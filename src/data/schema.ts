@@ -20,9 +20,15 @@ export function listHabits(): Promise<Habit[]> {
   return db.habits.orderBy('order').toArray();
 }
 
-export async function listActiveHabits(): Promise<Habit[]> {
-  const all = await listHabits();
-  return all.filter((habit) => habit.archivedAt === null);
+/**
+ * Sin `async`: devuelve la promesa de Dexie tal cual.
+ *
+ * Envolverla en una funcion async nativa rompe el rastreo de zonas de Dexie y
+ * `useLiveQuery` deja de reaccionar a las escrituras: la primera carga funciona
+ * y a partir de ahi la UI se queda congelada hasta recargar.
+ */
+export function listActiveHabits(): Promise<Habit[]> {
+  return db.habits.filter((habit) => habit.archivedAt === null).sortBy('order');
 }
 
 export async function createHabit(draft: Draft<Habit>): Promise<Habit> {
@@ -63,9 +69,9 @@ export function listMoods(): Promise<MoodDimension[]> {
   return db.moodDimensions.orderBy('order').toArray();
 }
 
-export async function listActiveMoods(): Promise<MoodDimension[]> {
-  const all = await listMoods();
-  return all.filter((dimension) => dimension.archivedAt === null);
+/** Sin `async`, por lo mismo que `listActiveHabits`. */
+export function listActiveMoods(): Promise<MoodDimension[]> {
+  return db.moodDimensions.filter((dimension) => dimension.archivedAt === null).sortBy('order');
 }
 
 export async function createMood(draft: Draft<MoodDimension>): Promise<MoodDimension> {
