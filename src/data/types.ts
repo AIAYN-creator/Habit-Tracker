@@ -34,9 +34,11 @@ export type Frequency =
   | { kind: 'weekdays'; days: number[] }
   | { kind: 'none' };
 
-/** Como se visualiza esta metrica. Opcional: si falta, se usa el defecto del tipo. */
+/** Como se visualiza y se registra esta metrica. Opcional: si falta, el defecto del tipo. */
 export interface Display {
   chart?: 'heatmap' | 'line' | 'bars';
+  /** Solo para escalas de maximo 5: se registra tocando una de cinco caras. */
+  input?: 'faces';
 }
 
 export interface Habit {
