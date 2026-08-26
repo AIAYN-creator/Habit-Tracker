@@ -1,4 +1,4 @@
-import { contrastRatio, db, useLiveQuery } from '@/data';
+import { contrastRatio, db, loadFixture, useLiveQuery } from '@/data';
 import { Button } from '@/ui';
 import {
   applyAppearance,
@@ -158,6 +158,26 @@ export function ThemePanel() {
       >
         Restablecer
       </Button>
+
+      {import.meta.env.DEV ? (
+        <div className={styles.group}>
+          <p className={styles.title}>Desarrollo</p>
+          <Button
+            variant="danger"
+            onClick={() => {
+              // Vacia la base antes: una base mitad real mitad sintetica es
+              // imposible de razonar, y borrar lo real por accidente seria el
+              // peor resultado de una herramienta de desarrollo.
+              if (window.confirm('Esto borra todos los datos locales y carga datos de ejemplo.')) {
+                void loadFixture();
+              }
+            }}
+          >
+            Cargar datos de ejemplo
+          </Button>
+          <p className={styles.hint}>Sólo en desarrollo: no aparece en el build de producción.</p>
+        </div>
+      ) : null}
     </div>
   );
 }
