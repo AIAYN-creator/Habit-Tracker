@@ -1,10 +1,14 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DayEntry } from '@/features/entry/DayEntry';
 import { ChartsView } from '@/features/charts/ChartsView';
 import { History } from '@/features/history/History';
 import { HabitForm } from '@/features/schema/HabitForm';
 import { MoodForm } from '@/features/schema/MoodForm';
 import { SyncPanel } from '@/features/sync/SyncPanel';
+import { useAutoSync } from '@/features/sync/useAutoSync';
+import { ThemePanel } from '@/features/theme/ThemePanel';
+import { applyAppearance, applyDensity, readAppearance } from '@/features/theme/theme';
+import { db, useLiveQuery } from '@/data';
 import { todayLocal } from '@/lib/date';
 import { Button, Sheet } from '@/ui';
 import styles from './App.module.css';
@@ -14,9 +18,22 @@ import styles from './App.module.css';
  * y no pueden importarse entre si. La fecha vive aqui porque la eligen dos.
  */
 export function App() {
-  const [panel, setPanel] = useState<'habits' | 'moods' | 'sync' | null>(null);
+  const [panel, setPanel] = useState<'habits' | 'moods' | 'sync' | 'theme' | null>(null);
   const [tab, setTab] = useState<'day' | 'history' | 'charts'>('day');
   const [date, setDate] = useState(todayLocal());
+
+  useAutoSync();
+
+  // El tema guardado se aplica al arrancar, antes de que el usuario lo toque.
+  const appearance = useLiveQuery(() => db.settings.get('appearance'), []);
+  const density = useLiveQuery(() => db.settings.get('density'), []);
+  useEffect(() => {
+    if (appearance !== undefined) applyAppearance(readAppearance(appearance.value));
+  }, [appearance]);
+  useEffect(() => {
+    if (density !== undefined)
+      applyDensity(density.value === 'compact' ? 'compact' : 'comfortable');
+  }, [density]);
 
   return (
     <div className={styles.app}>
@@ -76,6 +93,15 @@ export function App() {
         >
           Gráficas
         </Button>
+        <Button
+          variant={panel === 'theme' ? 'primary' : 'ghost'}
+          aria-label="Apariencia"
+          onClick={() => {
+            setPanel('theme');
+          }}
+        >
+          Aa
+        </Button>
       </nav>
 
       <Sheet
@@ -103,6 +129,15 @@ export function App() {
             setPanel(null);
           }}
         />
+      </Sheet>
+      <Sheet
+        open={panel === 'theme'}
+        title="Apariencia"
+        onClose={() => {
+          setPanel(null);
+        }}
+      >
+        <ThemePanel />
       </Sheet>
       <Sheet
         open={panel === 'sync'}

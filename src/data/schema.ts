@@ -1,4 +1,5 @@
 import { db } from './db';
+import { enqueue } from './entries';
 import { habitId, moodId } from './ids';
 import type { Habit, MoodDimension } from './types';
 
@@ -11,10 +12,6 @@ function nowIso(): string {
 const SCHEMA_PATH = { habits: 'schemas/habits.json', moods: 'schemas/moods.json' } as const;
 
 type Draft<T> = Omit<T, 'id' | 'order' | 'createdAt' | 'updatedAt' | 'archivedAt'>;
-
-async function enqueue(path: string, now: string): Promise<void> {
-  await db.outbox.add({ path, createdAt: now });
-}
 
 export function listHabits(): Promise<Habit[]> {
   return db.habits.orderBy('order').toArray();

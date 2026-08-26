@@ -19,6 +19,22 @@ export function pathForDate(date: DateKey): string {
   return `entries/${yearOf(date)}/${date}.json`;
 }
 
+/**
+ * Se encola la **ruta**, no el contenido, y sin repetir.
+ *
+ * Tocar el mismo dia cinco veces sin red deja un elemento en la cola, no cinco
+ * versiones del fichero: al empujar se lee el estado actual, que es lo que hay
+ * que enviar.
+ */
+export async function enqueue(path: string, now: string): Promise<void> {
+  const existing = await db.outbox.where('path').equals(path).first();
+  if (existing?.id !== undefined) {
+    await db.outbox.update(existing.id, { createdAt: now });
+    return;
+  }
+  await db.outbox.add({ path, createdAt: now });
+}
+
 function emptyEntry(date: DateKey, now: string): Entry {
   return {
     date,
@@ -46,7 +62,7 @@ async function mutate(date: DateKey, apply: (entry: Entry) => void): Promise<voi
     apply(entry);
     entry.updatedAt = now;
     await db.entries.put(entry);
-    await db.outbox.add({ path: pathForDate(date), createdAt: now });
+    await enqueue(pathForDate(date), now);
   });
 }
 
