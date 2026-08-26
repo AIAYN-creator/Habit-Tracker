@@ -1,11 +1,9 @@
 import { useState } from 'react';
 import { entries, schema, useLiveQuery, type HabitValue } from '@/data';
 import { formatLongDate, mondayOf, shiftDays, todayLocal } from '@/lib/date';
-import { Button, Field, Heatmap, Input } from '@/ui';
+import { Button, Heatmap } from '@/ui';
 import { HabitControl } from './HabitControl';
 import styles from './DayEntry.module.css';
-
-const PALETTE = ['#e07a5f', '#3d5a80', '#81b29a', '#f2cc8f', '#9d8189'] as const;
 
 /**
  * Registro del dia. Ver docs/producto/entrada.md.
@@ -13,9 +11,8 @@ const PALETTE = ['#e07a5f', '#3d5a80', '#81b29a', '#f2cc8f', '#9d8189'] as const
  * Sin boton de guardar: cada interaccion escribe en el momento. La misma
  * pantalla sirve para hoy y para editar un dia pasado.
  */
-export function DayEntry() {
+export function DayEntry({ onManage }: { onManage: () => void }) {
   const [date, setDate] = useState(todayLocal());
-  const [draftName, setDraftName] = useState('');
 
   const habits = useLiveQuery(() => schema.listActiveHabits(), []);
   const entry = useLiveQuery(() => entries.get(date), [date]);
@@ -35,20 +32,6 @@ export function DayEntry() {
   const isToday = date === todayLocal();
   // useLiveQuery devuelve undefined mientras carga: no es lo mismo que vacio.
   const loading = habits === undefined;
-
-  async function addHabit() {
-    const name = draftName.trim();
-    if (name.length === 0) return;
-    const count = habits?.length ?? 0;
-    await schema.createHabit({
-      name,
-      type: 'boolean',
-      config: {},
-      frequency: { kind: 'daily' },
-      color: PALETTE[count % PALETTE.length] ?? PALETTE[0],
-    });
-    setDraftName('');
-  }
 
   function setValue(id: string, value: HabitValue) {
     void entries.setValue(date, 'habits', id, value);
@@ -126,32 +109,9 @@ export function DayEntry() {
           ))
         )}
 
-        <div className={styles.newHabit}>
-          <Field label="Nuevo hábito">
-            {({ id, describedBy }) => (
-              <Input
-                id={id}
-                aria-describedby={describedBy}
-                value={draftName}
-                placeholder="Leer, correr, beber agua…"
-                onChange={(event) => {
-                  setDraftName(event.target.value);
-                }}
-                onKeyDown={(event) => {
-                  if (event.key === 'Enter') void addHabit();
-                }}
-              />
-            )}
-          </Field>
-          <Button
-            variant="primary"
-            onClick={() => {
-              void addHabit();
-            }}
-          >
-            Añadir
-          </Button>
-        </div>
+        <Button variant="primary" onClick={onManage}>
+          Añadir o gestionar hábitos
+        </Button>
       </section>
     </main>
   );
