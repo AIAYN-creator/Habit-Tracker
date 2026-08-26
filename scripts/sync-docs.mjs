@@ -29,6 +29,7 @@ export const SECTIONS = {
     'sync',
     'cola',
     'estado-sync',
+    'qa',
   ],
   diseno: [
     'tokens',
