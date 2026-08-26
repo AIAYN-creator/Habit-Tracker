@@ -24,7 +24,7 @@ export class HabitsDb extends Dexie {
       moodDimensions: 'id, order, archivedAt',
       entries: 'date, updatedAt',
       settings: 'key',
-      outbox: '++id, createdAt',
+      outbox: '++id, path, createdAt',
       syncState: 'key',
       syncBase: 'path, syncedAt',
     });

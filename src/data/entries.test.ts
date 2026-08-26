@@ -27,6 +27,19 @@ describe('setValue', () => {
     expect(queued[0]?.path).toBe('entries/2026/2026-08-26.json');
   });
 
+  it('cinco escrituras del mismo dia dejan un solo elemento en la cola', async () => {
+    for (const value of [10, 20, 30, 40, 50]) {
+      await entries.setValue('2026-08-26', 'habits', 'h_run', value);
+    }
+    expect(await db.outbox.count()).toBe(1);
+  });
+
+  it('dias distintos se encolan por separado', async () => {
+    await entries.setValue('2026-08-26', 'habits', 'h_run', 10);
+    await entries.setValue('2026-08-27', 'habits', 'h_run', 10);
+    expect(await db.outbox.count()).toBe(2);
+  });
+
   it('sella updatedAt en cada escritura', async () => {
     await entries.setValue('2026-08-26', 'habits', 'h_run', 35);
     const first = await entries.get('2026-08-26');
