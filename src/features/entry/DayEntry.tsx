@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { entries, schema, useLiveQuery, type HabitValue } from '@/data';
+import { entries, schema, useLiveQuery, type HabitValue, type MoodValue } from '@/data';
 import { formatLongDate, mondayOf, shiftDays, todayLocal } from '@/lib/date';
 import { Button, Heatmap } from '@/ui';
 import { HabitControl } from './HabitControl';
+import { MoodControl } from './MoodControl';
 import styles from './DayEntry.module.css';
 
 /**
@@ -11,10 +12,16 @@ import styles from './DayEntry.module.css';
  * Sin boton de guardar: cada interaccion escribe en el momento. La misma
  * pantalla sirve para hoy y para editar un dia pasado.
  */
-export function DayEntry({ onManage }: { onManage: () => void }) {
+interface Props {
+  onManage: () => void;
+  onManageMoods: () => void;
+}
+
+export function DayEntry({ onManage, onManageMoods }: Props) {
   const [date, setDate] = useState(todayLocal());
 
   const habits = useLiveQuery(() => schema.listActiveHabits(), []);
+  const moods = useLiveQuery(() => schema.listActiveMoods(), []);
   const entry = useLiveQuery(() => entries.get(date), [date]);
 
   const WEEKS = 18;
@@ -39,6 +46,14 @@ export function DayEntry({ onManage }: { onManage: () => void }) {
 
   function clearValue(id: string) {
     void entries.clearValue(date, 'habits', id);
+  }
+
+  function setMood(id: string, value: MoodValue) {
+    void entries.setValue(date, 'moods', id, value);
+  }
+
+  function clearMood(id: string) {
+    void entries.clearValue(date, 'moods', id);
   }
 
   return (
@@ -112,6 +127,32 @@ export function DayEntry({ onManage }: { onManage: () => void }) {
         <Button variant="primary" onClick={onManage}>
           Añadir o gestionar hábitos
         </Button>
+      </section>
+
+      {/* El animo va despues: los habitos son mecanicos, esto pide un segundo
+          de introspeccion, y poner lo lento primero invita a cerrar la app. */}
+      <section className={styles.section}>
+        <h2 className={styles.sectionTitle}>Estado de ánimo</h2>
+
+        {moods === undefined ? null : moods.length === 0 ? (
+          <p className={styles.empty}>Sin dimensiones de ánimo todavía.</p>
+        ) : (
+          moods.map((dimension) => (
+            <MoodControl
+              key={`${dimension.id}-${date}`}
+              dimension={dimension}
+              value={entry?.moods[dimension.id]}
+              onSet={(value) => {
+                setMood(dimension.id, value);
+              }}
+              onClear={() => {
+                clearMood(dimension.id);
+              }}
+            />
+          ))
+        )}
+
+        <Button onClick={onManageMoods}>Añadir o gestionar el ánimo</Button>
       </section>
     </main>
   );
