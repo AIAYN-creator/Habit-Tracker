@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { DayEntry } from '@/features/entry/DayEntry';
 import { HabitForm } from '@/features/schema/HabitForm';
 import { MoodForm } from '@/features/schema/MoodForm';
+import { SyncPanel } from '@/features/sync/SyncPanel';
 import { Sheet } from '@/ui';
 
 /**
@@ -9,7 +10,7 @@ import { Sheet } from '@/ui';
  * dos features distintas y no pueden importarse entre si.
  */
 export function App() {
-  const [panel, setPanel] = useState<'habits' | 'moods' | null>(null);
+  const [panel, setPanel] = useState<'habits' | 'moods' | 'sync' | null>(null);
 
   return (
     <>
@@ -19,6 +20,9 @@ export function App() {
         }}
         onManageMoods={() => {
           setPanel('moods');
+        }}
+        onSync={() => {
+          setPanel('sync');
         }}
       />
       <Sheet
@@ -33,6 +37,15 @@ export function App() {
             setPanel(null);
           }}
         />
+      </Sheet>
+      <Sheet
+        open={panel === 'sync'}
+        title="Sincronización"
+        onClose={() => {
+          setPanel(null);
+        }}
+      >
+        <SyncPanel />
       </Sheet>
       <Sheet
         open={panel === 'moods'}

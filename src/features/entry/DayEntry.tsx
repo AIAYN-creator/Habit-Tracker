@@ -15,9 +15,10 @@ import styles from './DayEntry.module.css';
 interface Props {
   onManage: () => void;
   onManageMoods: () => void;
+  onSync: () => void;
 }
 
-export function DayEntry({ onManage, onManageMoods }: Props) {
+export function DayEntry({ onManage, onManageMoods, onSync }: Props) {
   const [date, setDate] = useState(todayLocal());
 
   const habits = useLiveQuery(() => schema.listActiveHabits(), []);
@@ -153,6 +154,10 @@ export function DayEntry({ onManage, onManageMoods }: Props) {
         )}
 
         <Button onClick={onManageMoods}>Añadir o gestionar el ánimo</Button>
+      </section>
+
+      <section className={styles.section}>
+        <Button onClick={onSync}>Sincronización</Button>
       </section>
     </main>
   );

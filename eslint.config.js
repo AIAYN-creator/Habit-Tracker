@@ -96,6 +96,13 @@ export default tseslint.config(
   {
     files: ['**/*.test.{ts,tsx}', 'src/test/**'],
     languageOptions: { globals: { ...globals.browser, ...globals.node } },
+    rules: {
+      // Ruido en tests, no señal: un doble que devuelve una promesa no
+      // necesita await, y las aserciones de vitest reciben el metodo suelto
+      // a proposito.
+      '@typescript-eslint/require-await': 'off',
+      '@typescript-eslint/unbound-method': 'off',
+    },
   },
   {
     // Ficheros de configuracion en JS: sin reglas que exijan tipos.
