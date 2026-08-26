@@ -1,11 +1,3 @@
----
-description: Iconos de instalación, splash screens y theme-color para móvil.
-sources: []
-estimated_duration_hours: null
-actual_duration_hours: null
-assigned_to: agent
-status_note: null
----
 # Assets de PWA
 
 Todo lo que el sistema operativo necesita para que la app instalada no parezca una página web con

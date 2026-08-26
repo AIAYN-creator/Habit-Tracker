@@ -1,12 +1,3 @@
----
-description: 'Definir y editar dimensiones de mood: escalas, multi-eje, tags libres
-  y notas.'
-sources: []
-estimated_duration_hours: null
-actual_duration_hours: null
-assigned_to: agent
-status_note: null
----
 # CRUD de dimensiones de mood
 
 Mismo patrón que `habitos`, en Ajustes → Estado de ánimo, con las diferencias propias de lo que

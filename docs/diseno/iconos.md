@@ -1,11 +1,3 @@
----
-description: Set de iconos propio e ilustraciones para estados vacíos.
-sources: []
-estimated_duration_hours: null
-actual_duration_hours: null
-assigned_to: agent
-status_note: null
----
 # Iconos e ilustraciones
 
 ## Decisión: base de terceros para los iconos, dibujo propio para las ilustraciones

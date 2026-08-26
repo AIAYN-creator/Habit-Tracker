@@ -37,6 +37,7 @@ de su tarjeta, que es también el scope de los commits relacionados: `git log --
 | [tecnica/serialize.md](tecnica/serialize.md) | Serialización a los ficheros del repo y codificación |
 | [tecnica/auth-gh.md](tecnica/auth-gh.md) | Token de GitHub: alcance, almacenamiento y caducidad |
 | [tecnica/seed.md](tecnica/seed.md) | Fixtures deterministas de desarrollo y casos límite |
+| [tecnica/sync.md](tecnica/sync.md) | Motor de sincronización: ciclo, cerrojo y pruebas |
 
 ## Diseño
 
@@ -49,6 +50,15 @@ de su tarjeta, que es también el scope de los commits relacionados: `git log --
 | [diseno/iconos.md](diseno/iconos.md) | Set de iconos e ilustraciones de estados vacíos |
 | [diseno/splash.md](diseno/splash.md) | Generación y verificación de los assets de PWA |
 | [diseno/a11y.md](diseno/a11y.md) | Accesibilidad, contraste y qué pasa con los colores del usuario |
+| [diseno/inputs.md](diseno/inputs.md) | Controles por tipo de dato y los tres estados de un registro |
+
+## Gráficas
+
+| Documento | Qué fija |
+|---|---|
+| [graficas/heatmap.md](graficas/heatmap.md) | Retícula de contribuciones y la capa compartida de gráficas |
+| [graficas/series.md](graficas/series.md) | Línea para escalas: eje fijo, huecos y curva |
+| [graficas/barras.md](graficas/barras.md) | Barras para contadores: agrupación, objetivo y formato |
 
 ## Sobre la fuente de verdad
 

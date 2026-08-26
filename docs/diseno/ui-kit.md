@@ -1,11 +1,3 @@
----
-description: Botón, input, sheet, toast y primitivas de layout sobre los design tokens.
-sources: []
-estimated_duration_hours: null
-actual_duration_hours: null
-assigned_to: agent
-status_note: null
----
 # Componentes base
 
 Las primitivas mínimas para construir v1, todas apoyadas en los tokens de `tokens`. Ni una más:

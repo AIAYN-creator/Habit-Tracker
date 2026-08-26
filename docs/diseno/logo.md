@@ -1,11 +1,3 @@
----
-description: Logo, marca, favicon y colores de marca coherentes con los design tokens.
-sources: []
-estimated_duration_hours: null
-actual_duration_hours: null
-assigned_to: agent
-status_note: null
----
 # Logo e identidad
 
 ## La restricción que manda sobre todas

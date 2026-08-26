@@ -1,12 +1,3 @@
----
-description: Manifest, service worker, shell offline e instalación en móvil sin app
-  store.
-sources: []
-estimated_duration_hours: null
-actual_duration_hours: null
-assigned_to: agent
-status_note: null
----
 # PWA instalable
 
 El principio de `vision` es que la app funciona al 100% sin red. Esta tarjeta es donde eso deja

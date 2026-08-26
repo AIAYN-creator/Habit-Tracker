@@ -1,12 +1,3 @@
----
-description: Edición en runtime de paleta, tipografía, densidad y color por hábito
-  o categoría.
-sources: []
-estimated_duration_hours: null
-actual_duration_hours: null
-assigned_to: agent
-status_note: null
----
 # Panel de customización
 
 Aquí es donde el diferenciador de `vision` deja de ser una propiedad del código y se convierte en

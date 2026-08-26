@@ -1,11 +1,3 @@
----
-description: Conversión entre el modelo local y los ficheros JSON del repo de GitHub.
-sources: []
-estimated_duration_hours: null
-actual_duration_hours: null
-assigned_to: agent
-status_note: null
----
 # Serialización de datos
 
 Conversión entre el modelo local y los ficheros del repo. Es la pieza que decide si el `diff` de

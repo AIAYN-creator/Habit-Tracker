@@ -1,12 +1,4 @@
----
-description: Repositorios de lectura/escritura sobre Dexie y migraciones entre versiones.
-sources: []
-estimated_duration_hours: null
-actual_duration_hours: null
-assigned_to: agent
-status_note: null
----
-	# Capa de acceso a datos
+# Capa de acceso a datos
 
 Único punto por el que se lee y se escribe en IndexedDB. Ningún componente importa Dexie: lo
 prohíbe la regla de dependencias de `stack` y lo verifica el lint de `tooling`.

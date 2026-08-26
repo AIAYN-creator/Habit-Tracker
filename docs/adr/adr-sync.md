@@ -1,13 +1,3 @@
----
-description: Pull+merge+push con fusion a tres bandas por fichero de dia (base = ultima
-  version sincronizada); LWW por timestamp solo en las claves que ambos dispositivos
-  tocaron.
-sources: []
-estimated_duration_hours: null
-actual_duration_hours: null
-assigned_to: agent
-status_note: null
----
 # ADR: sincronización y conflictos
 
 **Estado:** propuesto, pendiente de firma
