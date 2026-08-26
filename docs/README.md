@@ -24,6 +24,7 @@ de su tarjeta, que es también el scope de los commits relacionados: `git log --
 | [producto/entrada.md](producto/entrada.md) | La pantalla de registro diario, reutilizada por el historial |
 | [producto/calendario.md](producto/calendario.md) | Historial en calendario: anillo de completitud y navegación |
 | [producto/lista.md](producto/lista.md) | Historial en lista: resumen por día, paginación y filtro |
+| [producto/dashboard.md](producto/dashboard.md) | v1.5: tablero configurable, y por qué son dos comportamientos |
 
 ## Técnica
 
@@ -42,6 +43,7 @@ de su tarjeta, que es también el scope de los commits relacionados: `git log --
 | [tecnica/seed.md](tecnica/seed.md) | Fixtures deterministas de desarrollo y casos límite |
 | [tecnica/sync.md](tecnica/sync.md) | Motor de sincronización: ciclo, cerrojo y pruebas |
 | [tecnica/cola.md](tecnica/cola.md) | Cola offline: rutas, deduplicación y reintentos |
+| [tecnica/docs.md](tecnica/docs.md) | Qué lleva la guía de uso, para quién y cuándo se escribe |
 | [tecnica/qa.md](tecnica/qa.md) | Los veinte escenarios de prueba y los criterios de salida de v1 |
 | [tecnica/estado-sync.md](tecnica/estado-sync.md) | Qué se enseña del estado de sincronización, y con cuánta insistencia |
 

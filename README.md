@@ -28,6 +28,42 @@ decididos y documentados, no construidos.
 El trabajo se lleva en un tablero de Histos aparte; las decisiones ya firmadas se reflejan en
 [`docs/`](docs/README.md).
 
+## Hoja de ruta
+
+Las 41 decisiones de v1 y v1.5 están cerradas y firmadas en [`docs/`](docs/README.md). Lo de v2 y
+v3 es intención, no compromiso: no tiene tarjetas ni decisiones tomadas.
+
+### v1 — en construcción
+
+Registro diario, CRUD de hábitos y moods, heatmap, series y barras, historial en calendario y
+lista, customización completa de apariencia, sincronización con GitHub y funcionamiento offline.
+
+**Modo claro y oscuro ya entran aquí**, no más tarde: están en los design tokens desde el primer
+día, con conmutador manual y seguimiento del sistema.
+
+### v1.5
+
+Tablero configurable con widgets reordenables. Ver
+[producto/dashboard.md](docs/producto/dashboard.md).
+
+### v2 — la app fuera del navegador
+
+- **Empaquetado de escritorio**, previsiblemente con Tauri antes que Electron: unos pocos MB
+  frente a más de cien, y acceso al almacén de credenciales del sistema, que es la respuesta real
+  al riesgo de guardar el token en un navegador.
+- **Interfaz en español e inglés.** Hoy los textos están escritos directamente en el código; hace
+  falta extraerlos y añadir una capa de traducción. Las fechas ya salen de `Intl`, así que esa
+  parte está resuelta de nacimiento.
+
+### v3 — multiusuario
+
+Migrar de GitHub como almacén a una base de datos con autenticación propia. El modelo
+schema-driven está pensado para que sea mecánico —los datos ya son JSON con identificadores
+estables y sin `userId` implícito— pero exige servidor, y con él todo lo que v1 evita a propósito:
+cuentas, permisos, recuperación y coste de operación.
+
+Es un cambio de naturaleza del proyecto, no una versión más.
+
 ## Desarrollo
 
 Requiere Node 24 (ver `.nvmrc`).
