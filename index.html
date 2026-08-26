@@ -3,8 +3,40 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#1c2433" />
+    <meta name="theme-color" content="#162330" />
+    <meta
+      name="description"
+      content="Tracker de habitos y estado de animo local-first: funciona sin red y sincroniza con tu propio repositorio privado de GitHub."
+    />
+
     <title>Habit Tracker</title>
+
+    <!-- Vite reescribe estas rutas con el base del despliegue. -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!--
+      Open Graph. La imagen tiene que ir en URL absoluta: los rastreadores que
+      generan la preview no resuelven rutas relativas.
+    -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Habit Tracker" />
+    <meta property="og:title" content="Habit Tracker" />
+    <meta
+      property="og:description"
+      content="Habitos y estado de animo, local-first. Sin servidor, sin cuenta, tus datos en tu propio repositorio."
+    />
+    <meta property="og:url" content="https://aiayn-creator.github.io/Habit-Tracker/" />
+    <meta
+      property="og:image"
+      content="https://aiayn-creator.github.io/Habit-Tracker/og-image.png"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Habit Tracker" />
+    <meta property="og:locale" content="es_ES" />
+    <meta name="twitter:card" content="summary_large_image" />
   </head>
   <body>
     <div id="root"></div>
