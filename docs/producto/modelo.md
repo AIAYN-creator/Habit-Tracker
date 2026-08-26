@@ -63,9 +63,15 @@ métrica. Ese ajuste vive en el schema, junto al hábito, y no en las preferenci
 propiedad de la métrica, y debe viajar con ella entre dispositivos.
 
 ```json
-"display": { "chart": "bars" }
+"display": { "chart": "bars", "input": "faces" }
 ```
 
+- `input`: como se pide el valor al registrar. **Opcional**, y hoy sólo tiene un valor:
+  `faces`, aplicable a dimensiones de ánimo de tipo `scale` con máximo 5, que se registran
+  tocando una de cinco caras en vez de un número. Es una propiedad de la métrica y no una
+  preferencia global —quien tenga dos escalas puede querer caras en el ánimo y números en las
+  horas de sueño—, así que vive aquí y no en `panel-tema`. Si falta, se usa el control por
+  defecto del tipo.
 - `chart`: `heatmap`, `line` o `bars`. **Opcional**: si falta, se usa el valor por defecto de la
   tabla de arriba. Que sea opcional es lo que hace este cambio compatible hacia atrás, porque los
   ficheros ya escritos no lo llevan y no necesitan migrarse.
@@ -159,7 +165,7 @@ Qué se considera cambio compatible y qué no:
 | Cambio | Compatible | Qué pasa con el histórico |
 |---|---|---|
 | Renombrar, recolorear, reordenar | Sí | Nada, el `id` no cambia |
-| Cambiar o quitar `display` | Sí | Nada, sólo afecta a cómo se dibuja |
+| Cambiar o quitar `display` | Sí | Nada, sólo afecta a cómo se dibuja o se registra |
 | Añadir un hábito | Sí | Los días previos quedan sin esa clave: "no registrado" |
 | Archivar un hábito | Sí | Sigue visible en el histórico, fuera del registro diario |
 | Ampliar el rango de una `scale` (1-5 → 1-10) | Sí | Los valores viejos siguen siendo válidos |
@@ -182,6 +188,7 @@ no en rehacer el modelo.
 - [ ] Tipos TypeScript derivados de este documento, con los cuatro `type` de hábito y los tres de
       dimensión.
 - [ ] `display` es opcional y un fichero sin él se lee sin migración.
+- [ ] `display.input` con valor `faces` sólo se ofrece en escalas de máximo 5.
 - [ ] Un fichero de ejemplo válido por cada uno de los tres tipos de fichero.
 - [ ] Queda documentado que ausencia de clave ≠ valor falso.
 - [ ] La tabla de compatibilidad de cambios de schema es la referencia de `validacion`.

@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
 import type { MoodDimension, MoodValue } from '@/data';
+import { Face } from '@/ui';
 import styles from './HabitControl.module.css';
 
 /** Las cinco caras, de peor a mejor. El valor guardado sigue siendo un 1 a 5. */
 const FACES = [
-  { value: 1, emoji: '😞', label: 'Muy mal' },
-  { value: 2, emoji: '🙁', label: 'Mal' },
-  { value: 3, emoji: '😐', label: 'Normal' },
-  { value: 4, emoji: '🙂', label: 'Bien' },
-  { value: 5, emoji: '😄', label: 'Muy bien' },
+  { value: 1, label: 'Muy mal' },
+  { value: 2, label: 'Mal' },
+  { value: 3, label: 'Normal' },
+  { value: 4, label: 'Bien' },
+  { value: 5, label: 'Muy bien' },
 ] as const;
 
 interface Props {
@@ -23,32 +24,7 @@ export function MoodControl({ dimension, value, onSet, onClear }: Props) {
   const style = { '--habit-color': dimension.color } as React.CSSProperties;
 
   if (dimension.type === 'scale' && dimension.display?.input === 'faces') {
-    return (
-      <div className={styles.rowColumn} style={style}>
-        <span className={styles.name}>{dimension.name}</span>
-        <div className={styles.faces} role="radiogroup" aria-label={dimension.name}>
-          {FACES.map((face) => {
-            const selected = value === face.value;
-            return (
-              <button
-                key={face.value}
-                type="button"
-                role="radio"
-                aria-checked={selected}
-                aria-label={face.label}
-                className={styles.face}
-                onClick={() => {
-                  if (selected) onClear();
-                  else onSet(face.value);
-                }}
-              >
-                <span aria-hidden="true">{face.emoji}</span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-    );
+    return <FaceControl dimension={dimension} value={value} onSet={onSet} onClear={onClear} />;
   }
 
   if (dimension.type === 'scale') {
@@ -158,6 +134,71 @@ function NoteControl({ dimension, value, onSet, onClear }: Props) {
           setDraft(event.target.value);
         }}
       />
+    </div>
+  );
+}
+
+/**
+ * Una entrada por dia y se acaba.
+ *
+ * Mientras no hay respuesta, las cinco caras ocupan la pantalla. En cuanto se
+ * elige una, el resto se pliega y queda solo la elegida: no hay nada mas que
+ * hacer hoy con esto. Tocarla vuelve a abrirlo por si uno cambia de idea.
+ */
+function FaceControl({ dimension, value, onSet, onClear }: Props) {
+  const chosen = typeof value === 'number' ? value : null;
+  const [open, setOpen] = useState(chosen === null);
+  const style = { '--habit-color': dimension.color } as React.CSSProperties;
+
+  if (chosen !== null && !open) {
+    const face = FACES.find((option) => option.value === chosen);
+    return (
+      <button
+        type="button"
+        className={styles.faceSummary}
+        style={style}
+        onClick={() => {
+          setOpen(true);
+        }}
+      >
+        <span className={styles.faceChosen}>
+          <Face level={chosen as 1 | 2 | 3 | 4 | 5} size={28} />
+        </span>
+        <span className={styles.name}>{dimension.name}</span>
+        <span className={styles.value}>{face?.label}</span>
+      </button>
+    );
+  }
+
+  return (
+    <div className={styles.rowColumn} style={style}>
+      <span className={styles.name}>{dimension.name}</span>
+      <div className={styles.faces} role="radiogroup" aria-label={dimension.name}>
+        {FACES.map((option) => {
+          const selected = chosen === option.value;
+          return (
+            <button
+              key={option.value}
+              type="button"
+              role="radio"
+              aria-checked={selected}
+              aria-label={option.label}
+              className={styles.face}
+              onClick={() => {
+                if (selected) {
+                  onClear();
+                  setOpen(true);
+                } else {
+                  onSet(option.value);
+                  setOpen(false);
+                }
+              }}
+            >
+              <Face level={option.value} />
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }
