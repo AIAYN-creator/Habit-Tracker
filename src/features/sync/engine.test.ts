@@ -7,6 +7,7 @@ import { sync } from './engine';
 function fakeClient(overrides: Partial<GitHubClient> = {}): GitHubClient {
   return {
     getHead: vi.fn(async () => null),
+    bootstrap: vi.fn(async () => 'commit-0'),
     listFiles: vi.fn(async () => []),
     readBlob: vi.fn(async () => '{}'),
     push: vi.fn(async () => 'commit-1'),
@@ -129,6 +130,17 @@ describe('sync', () => {
 
     expect(client.push).toHaveBeenCalledTimes(1);
     expect(a).toBe(b);
+  });
+
+  it('un repositorio vacio se inicializa antes del primer empuje', async () => {
+    // La Git Data API responde 409 sobre un repo sin commits: hay que crear el
+    // primero por otra via. Fue el error real de la primera sincronizacion.
+    await entries.setValue('2026-08-26', 'habits', 'h_run', 30);
+    const client = fakeClient({ getHead: vi.fn(async () => null) });
+
+    await sync(client);
+
+    expect(client.push).toHaveBeenCalledWith(expect.objectContaining({ parent: null }));
   });
 
   it('sube las preferencias de tema pero jamas el token', async () => {

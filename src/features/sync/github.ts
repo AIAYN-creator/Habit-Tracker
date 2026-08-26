@@ -18,6 +18,8 @@ export interface TreeEntry {
 }
 
 export interface GitHubClient {
+  /** Crea el primer commit de un repositorio vacio y devuelve su SHA. */
+  bootstrap(): Promise<string>;
   /** SHA del commit al que apunta la rama, o null si el repo esta vacio. */
   getHead(): Promise<string | null>;
   listFiles(commitSha: string): Promise<TreeEntry[]>;
@@ -49,6 +51,7 @@ function describe(status: number): string {
   if (status === 403) return 'El token no tiene permiso para escribir en el repositorio';
   if (status === 404) return 'No se encuentra el repositorio con este token';
   if (status === 409) return 'El repositorio cambió mientras se sincronizaba';
+  if (status === 422) return 'GitHub rechazó el contenido enviado';
   return `GitHub respondió con un error (${String(status)})`;
 }
 
@@ -97,7 +100,45 @@ export function createGitHubClient(config: RepoConfig): GitHubClient {
       return fromBase64(blob.content);
     },
 
+    /**
+     * Un repositorio recien creado no tiene ni una rama, y la Git Data API no
+     * puede crear la primera: responde 409 "Git Repository is empty". La
+     * Contents API si sabe inicializarlo, asi que se usa una sola vez para
+     * poner el README que adr-repo pide de todos modos, y a partir de ahi
+     * todo sigue por el camino normal.
+     */
+    async bootstrap() {
+      const readme = [
+        '# Datos de Track Your Way',
+        '',
+        'Este repositorio lo genera la app <https://aiayn-creator.github.io/Habit-Tracker/>.',
+        '',
+        '- `schemas/habits.json` y `schemas/moods.json`: que se registra.',
+        '- `entries/<año>/<fecha>.json`: un fichero por dia, con los valores.',
+        '- `settings.json`: preferencias de apariencia.',
+        '',
+        'Se puede leer sin la app: son JSON con las claves ordenadas.',
+        '',
+        'Borrar una entrada la quita del arbol actual, pero **sigue en el',
+        'historial de Git**. Es como funciona Git, y es tambien la red que',
+        'salva de un borrado accidental.',
+        '',
+      ].join(`
+`);
+
+      const created = await call<{ commit: { sha: string } }>('/contents/README.md', {
+        method: 'PUT',
+        body: JSON.stringify({
+          message: 'sync: inicializar el almacen de datos',
+          content: toBase64(readme),
+          branch,
+        }),
+      });
+      return created.commit.sha;
+    },
+
     async push({ parent, files, message }) {
+      const base = parent ?? (await this.bootstrap());
       const blobs = await Promise.all(
         files.map(async (file) => {
           const blob = await call<{ sha: string }>('/git/blobs', {
@@ -108,27 +149,22 @@ export function createGitHubClient(config: RepoConfig): GitHubClient {
         }),
       );
 
+      const parentCommit = await call<{ tree: { sha: string } }>(`/git/commits/${base}`);
+
       const tree = await call<{ sha: string }>('/git/trees', {
         method: 'POST',
-        body: JSON.stringify({ ...(parent ? { base_tree: parent } : {}), tree: blobs }),
+        body: JSON.stringify({ base_tree: parentCommit.tree.sha, tree: blobs }),
       });
 
       const commit = await call<{ sha: string }>('/git/commits', {
         method: 'POST',
-        body: JSON.stringify({ message, tree: tree.sha, parents: parent ? [parent] : [] }),
+        body: JSON.stringify({ message, tree: tree.sha, parents: [base] }),
       });
 
-      if (parent) {
-        await call(`/git/refs/heads/${branch}`, {
-          method: 'PATCH',
-          body: JSON.stringify({ sha: commit.sha }),
-        });
-      } else {
-        await call('/git/refs', {
-          method: 'POST',
-          body: JSON.stringify({ ref: `refs/heads/${branch}`, sha: commit.sha }),
-        });
-      }
+      await call(`/git/refs/heads/${branch}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ sha: commit.sha }),
+      });
 
       return commit.sha;
     },
