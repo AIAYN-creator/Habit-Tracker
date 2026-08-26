@@ -19,6 +19,8 @@ de su tarjeta, que es también el scope de los commits relacionados: `git log --
 | [producto/vision.md](producto/vision.md) | Diferenciador, principios, alcance de v1 y qué queda fuera |
 | [producto/modelo.md](producto/modelo.md) | Modelo de datos schema-driven: hábitos, moods y entradas |
 | [producto/flujos.md](producto/flujos.md) | Navegación y los cinco flujos de uso, estados no felices incluidos |
+| [producto/habitos.md](producto/habitos.md) | CRUD de hábitos: tipos, frecuencia, archivado y reordenación |
+| [producto/moods.md](producto/moods.md) | CRUD de dimensiones de mood: escalas, tags y notas |
 
 ## Técnica
 
@@ -31,6 +33,10 @@ de su tarjeta, que es también el scope de los commits relacionados: `git log --
 | [tecnica/pwa.md](tecnica/pwa.md) | Manifest, caché, actualizaciones y el borrado de datos en iOS |
 | [tecnica/dexie.md](tecnica/dexie.md) | Tablas de IndexedDB, claves, transacciones y migraciones |
 | [tecnica/dal.md](tecnica/dal.md) | Capa de acceso a datos: superficie, atomicidad y fechas |
+| [tecnica/validacion.md](tecnica/validacion.md) | Validación con zod y aplicabilidad de cambios de schema |
+| [tecnica/serialize.md](tecnica/serialize.md) | Serialización a los ficheros del repo y codificación |
+| [tecnica/auth-gh.md](tecnica/auth-gh.md) | Token de GitHub: alcance, almacenamiento y caducidad |
+| [tecnica/seed.md](tecnica/seed.md) | Fixtures deterministas de desarrollo y casos límite |
 
 ## Diseño
 
@@ -42,6 +48,7 @@ de su tarjeta, que es también el scope de los commits relacionados: `git log --
 | [diseno/logo.md](diseno/logo.md) | Identidad, tokens de marca y entregables de icono |
 | [diseno/iconos.md](diseno/iconos.md) | Set de iconos e ilustraciones de estados vacíos |
 | [diseno/splash.md](diseno/splash.md) | Generación y verificación de los assets de PWA |
+| [diseno/a11y.md](diseno/a11y.md) | Accesibilidad, contraste y qué pasa con los colores del usuario |
 
 ## Sobre la fuente de verdad
 
