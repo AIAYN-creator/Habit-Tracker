@@ -17,6 +17,15 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
     <!--
+      iOS no lee del manifest ni el modo standalone ni la barra de estado: van
+      en estas dos etiquetas. Sin la primera, "Añadir a pantalla de inicio"
+      abre la app dentro de Safari, con su barra y todo.
+    -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Track" />
+
+    <!--
       Open Graph. La imagen tiene que ir en URL absoluta: los rastreadores que
       generan la preview no resuelven rutas relativas.
     -->

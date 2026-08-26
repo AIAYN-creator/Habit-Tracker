@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { db, useLiveQuery, type Conflict } from '@/data';
+import { usePersistentStorage } from '@/lib/storage';
 import { Button, Field, Input } from '@/ui';
 import { createGitHubClient, GitHubError } from './github';
 import { sync } from './engine';
@@ -26,6 +27,7 @@ function isCredentials(value: unknown): value is Credentials {
  * Ver docs/tecnica/auth-gh.md y docs/tecnica/estado-sync.md.
  */
 export function SyncPanel() {
+  const persisted = usePersistentStorage();
   const stored = useLiveQuery(() => db.settings.get('github'), []);
   const pending = useLiveQuery(() => db.outbox.count(), []);
   const state = useLiveQuery(() => db.syncState.toArray(), []);
@@ -175,6 +177,14 @@ export function SyncPanel() {
           Desconectar
         </Button>
       </div>
+
+      {persisted === false ? (
+        <p className={styles.muted}>
+          El navegador no ha concedido almacenamiento persistente. En iOS eso significa que puede
+          borrar tus datos locales si pasas una semana sin abrir la app: instálala en la pantalla de
+          inicio y sincroniza a menudo.
+        </p>
+      ) : null}
 
       <p className={styles.muted}>
         Desconectar borra el token de este dispositivo, pero sigue vivo en GitHub hasta que lo

@@ -5,6 +5,7 @@ import { History } from '@/features/history/History';
 import { HabitForm } from '@/features/schema/HabitForm';
 import { MoodForm } from '@/features/schema/MoodForm';
 import { SyncPanel } from '@/features/sync/SyncPanel';
+import { usePwa } from '@/features/pwa/usePwa';
 import { useAutoSync } from '@/features/sync/useAutoSync';
 import { ThemePanel } from '@/features/theme/ThemePanel';
 import { applyAppearance, applyDensity, readAppearance } from '@/features/theme/theme';
@@ -23,6 +24,7 @@ export function App() {
   const [date, setDate] = useState(todayLocal());
 
   useAutoSync();
+  const pwa = usePwa();
 
   // El tema guardado se aplica al arrancar, antes de que el usuario lo toque.
   const appearance = useLiveQuery(() => db.settings.get('appearance'), []);
@@ -37,6 +39,15 @@ export function App() {
 
   return (
     <div className={styles.app}>
+      {/* Aviso, nunca recarga sola: podria pillarte a media entrada. */}
+      {pwa.needsRefresh ? (
+        <div className={styles.update} role="status">
+          <span>Hay una versión nueva.</span>
+          <Button size="sm" variant="primary" onClick={pwa.update}>
+            Recargar
+          </Button>
+        </div>
+      ) : null}
       <div className={styles.content}>
         {tab === 'day' ? (
           <DayEntry
