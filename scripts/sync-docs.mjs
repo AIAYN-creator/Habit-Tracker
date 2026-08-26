@@ -13,9 +13,21 @@ import { join, dirname } from 'node:path';
 
 const SECTIONS = {
   adr: ['charts', 'adr-repo', 'adr-sync'],
-  producto: ['vision', 'modelo', 'flujos'],
-  tecnica: ['repo', 'stack', 'tooling', 'ci', 'pwa', 'dexie', 'dal'],
-  diseno: ['tokens', 'ui-kit', 'logo', 'iconos', 'splash', 'panel-tema'],
+  producto: ['vision', 'modelo', 'flujos', 'habitos', 'moods'],
+  tecnica: [
+    'repo',
+    'stack',
+    'tooling',
+    'ci',
+    'pwa',
+    'dexie',
+    'dal',
+    'validacion',
+    'serialize',
+    'auth-gh',
+    'seed',
+  ],
+  diseno: ['tokens', 'ui-kit', 'logo', 'iconos', 'splash', 'panel-tema', 'a11y'],
 };
 
 function stripFrontmatter(text) {
