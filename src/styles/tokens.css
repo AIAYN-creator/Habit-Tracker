@@ -1,0 +1,119 @@
+/*
+ * Design tokens. Ver docs/tokens.md.
+ * Tres capas: primitivas -> semanticas -> de componente.
+ * Ningun componente escribe un color, tamano de fuente o espaciado literal.
+ */
+
+:root {
+  /* --- Marca: NO customizable, ver docs/logo.md --- */
+  --brand-ink: oklch(25% 0.03 250);
+  --brand-accent: oklch(58% 0.16 250);
+
+  /* --- Primitivas --- */
+  --gray-0: oklch(100% 0 0);
+  --gray-50: oklch(98% 0.005 250);
+  --gray-200: oklch(90% 0.01 250);
+  --gray-400: oklch(70% 0.015 250);
+  --gray-600: oklch(55% 0.02 250);
+  --gray-800: oklch(32% 0.015 250);
+  --gray-900: oklch(25% 0.02 250);
+  --gray-950: oklch(18% 0.01 250);
+
+  /* --- Semanticas: color --- */
+  --color-bg: var(--gray-50);
+  --color-surface: var(--gray-0);
+  --color-text: var(--gray-900);
+  --color-text-muted: var(--gray-600);
+  --color-border: var(--gray-200);
+  --color-accent: oklch(60% 0.15 250);
+  --color-accent-contrast: oklch(100% 0 0);
+  --color-danger: oklch(58% 0.19 25);
+  --color-focus: var(--color-accent);
+
+  /* --- Tipografia --- */
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: Georgia, 'Times New Roman', serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-family: var(--font-sans);
+
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.5rem;
+  --line-height-tight: 1.2;
+  --line-height-base: 1.5;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+
+  /* --- Densidad: multiplicador unico, no escala el texto --- */
+  --density: 1;
+
+  /* --- Espaciado, base 4px --- */
+  --space-1: calc(4px * var(--density));
+  --space-2: calc(8px * var(--density));
+  --space-3: calc(12px * var(--density));
+  --space-4: calc(16px * var(--density));
+  --space-6: calc(24px * var(--density));
+  --space-8: calc(32px * var(--density));
+  --space-12: calc(48px * var(--density));
+
+  /* Suelo tactil: nunca por debajo de 36px */
+  --control-height: max(36px, calc(44px * var(--density)));
+
+  /* --- Radio --- */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  /* --- Sombra --- */
+  --shadow-sm: 0 1px 2px oklch(0% 0 0 / 8%);
+  --shadow-md: 0 4px 12px oklch(0% 0 0 / 10%);
+  --shadow-lg: 0 12px 32px oklch(0% 0 0 / 14%);
+
+  /* --- Movimiento --- */
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+:root[data-density='compact'] {
+  --density: 0.75;
+}
+
+/* Tema oscuro: solo redefine semanticas */
+:root[data-theme='dark'] {
+  --color-bg: var(--gray-950);
+  --color-surface: oklch(23% 0.012 250);
+  --color-text: oklch(95% 0.01 250);
+  --color-text-muted: var(--gray-400);
+  --color-border: var(--gray-800);
+  --shadow-sm: none;
+  --shadow-md: 0 4px 12px oklch(0% 0 0 / 40%);
+  --shadow-lg: 0 12px 32px oklch(0% 0 0 / 50%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --color-bg: var(--gray-950);
+    --color-surface: oklch(23% 0.012 250);
+    --color-text: oklch(95% 0.01 250);
+    --color-text-muted: var(--gray-400);
+    --color-border: var(--gray-800);
+    --shadow-sm: none;
+    --shadow-md: 0 4px 12px oklch(0% 0 0 / 40%);
+    --shadow-lg: 0 12px 32px oklch(0% 0 0 / 50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-base: 0ms;
+    --duration-slow: 0ms;
+  }
+}
