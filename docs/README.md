@@ -57,6 +57,7 @@ de su tarjeta, que es también el scope de los commits relacionados: `git log --
 | [diseno/a11y.md](diseno/a11y.md) | Accesibilidad, contraste y qué pasa con los colores del usuario |
 | [diseno/inputs.md](diseno/inputs.md) | Controles por tipo de dato y los tres estados de un registro |
 | [diseno/micro.md](diseno/micro.md) | Micro-interacciones: dónde animar, dónde no y con qué duración |
+| [diseno/pulido.md](diseno/pulido.md) | Pase de pulido: matriz de estados, cifras tabulares y áreas seguras |
 
 ## Gráficas
 

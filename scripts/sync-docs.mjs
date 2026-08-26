@@ -30,7 +30,18 @@ export const SECTIONS = {
     'cola',
     'estado-sync',
   ],
-  diseno: ['tokens', 'ui-kit', 'logo', 'iconos', 'splash', 'panel-tema', 'a11y', 'inputs', 'micro'],
+  diseno: [
+    'tokens',
+    'ui-kit',
+    'logo',
+    'iconos',
+    'splash',
+    'panel-tema',
+    'a11y',
+    'inputs',
+    'micro',
+    'pulido',
+  ],
   graficas: ['heatmap', 'series', 'barras'],
 };
 
