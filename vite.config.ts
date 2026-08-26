@@ -55,6 +55,12 @@ export default defineConfig({
     },
   },
   test: {
+    alias: {
+      // El modulo virtual del plugin de PWA no existe en vitest.
+      'virtual:pwa-register': fileURLToPath(
+        new URL('./src/test/pwa-register-stub.ts', import.meta.url),
+      ),
+    },
     globals: true,
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],

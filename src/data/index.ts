@@ -5,5 +5,7 @@ export * from './serialize';
 export * from './merge';
 export * from './expectations';
 export * from './contrast';
+export * from './validation';
+export { loadFixture, buildFixture } from './seed';
 export { useLiveQuery } from './useLiveQuery';
 export * from './types';
