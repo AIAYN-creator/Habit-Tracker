@@ -50,6 +50,11 @@ export function get(date: DateKey): Promise<Entry | undefined> {
   return db.entries.get(date);
 }
 
+/** El dia mas antiguo con registro, para el rango de "todo el tiempo". */
+export function firstDate(): Promise<Entry | undefined> {
+  return db.entries.orderBy('date').first();
+}
+
 /** Rango inclusivo, para el mes del calendario o el año del heatmap. */
 export function range(from: DateKey, to: DateKey): Promise<Entry[]> {
   return db.entries.where('date').between(from, to, true, true).toArray();

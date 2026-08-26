@@ -1,27 +1,33 @@
 import { useState } from 'react';
 import { entries, schema, useLiveQuery } from '@/data';
-import { shiftDays, todayLocal } from '@/lib/date';
+import { daysBetween, shiftDays, todayLocal } from '@/lib/date';
 import { Bars, Button, Series, type Point } from '@/ui';
 import { bucketize, groupingFor, groupingLabel, targetFactor } from './bucketing';
 import styles from './ChartsView.module.css';
 
-const RANGES = [
+/** `null` es todo el tiempo: desde el primer dia registrado. */
+const RANGES: { days: number | null; label: string }[] = [
   { days: 30, label: '30 días' },
   { days: 90, label: '90 días' },
   { days: 365, label: 'Año' },
-] as const;
+  { days: null, label: 'Todo' },
+];
 
 /** Una gráfica por métrica, del tipo que le corresponde. */
 export function ChartsView() {
-  const [days, setDays] = useState<number>(30);
+  const [days, setDays] = useState<number | null>(30);
   const habits = useLiveQuery(() => schema.listActiveHabits(), []);
   const moods = useLiveQuery(() => schema.listActiveMoods(), []);
+  const oldest = useLiveQuery(() => entries.firstDate(), []);
 
   const to = todayLocal();
-  const from = shiftDays(to, -(days - 1));
+  // Con "Todo", el rango arranca en el primer dia registrado. Sin datos
+  // todavia, se comporta como el mes: no tiene sentido un eje vacio de años.
+  const from = days === null ? (oldest?.date ?? shiftDays(to, -29)) : shiftDays(to, -(days - 1));
+  const span = daysBetween(from, to) + 1;
   const range = useLiveQuery(() => entries.range(from, to), [from, to]);
 
-  const grouping = groupingFor(days);
+  const grouping = groupingFor(span);
   const byDate = new Map((range ?? []).map((entry) => [entry.date, entry]));
 
   const series = (key: 'habits' | 'moods', id: string): Point[] => {
@@ -56,7 +62,7 @@ export function ChartsView() {
         <div className={styles.ranges}>
           {RANGES.map((option) => (
             <Button
-              key={option.days}
+              key={option.label}
               size="sm"
               variant={days === option.days ? 'primary' : 'ghost'}
               onClick={() => {
