@@ -143,6 +143,35 @@ describe('sync', () => {
     expect(client.push).toHaveBeenCalledWith(expect.objectContaining({ parent: null }));
   });
 
+  it('ignora los ficheros del repositorio que no son suyos', async () => {
+    // El README que pide adr-repo no es JSON. Intentar parsearlo tumbaba la
+    // sincronizacion entera: fue el segundo error real contra GitHub.
+    const client = fakeClient({
+      getHead: vi.fn(async () => 'head-3'),
+      listFiles: vi.fn(async () => [
+        { path: 'README.md', sha: 'blob-readme' },
+        { path: 'LICENSE', sha: 'blob-licencia' },
+        { path: 'entries/2026/2026-08-25.json', sha: 'blob-dia' },
+      ]),
+      readBlob: vi.fn(async (sha: string) => {
+        if (sha !== 'blob-dia') throw new Error('no deberia leerse');
+        return stableStringify({
+          date: '2026-08-25',
+          schemaVersion: 1,
+          habits: { h_run: 20 },
+          moods: {},
+          createdAt: '2026-08-25T20:00:00Z',
+          updatedAt: '2026-08-25T20:00:00Z',
+        });
+      }),
+    });
+
+    await expect(sync(client)).resolves.toBeDefined();
+
+    expect(await db.entries.get('2026-08-25')).toBeDefined();
+    expect(await db.syncBase.get('README.md')).toBeUndefined();
+  });
+
   it('sube las preferencias de tema pero jamas el token', async () => {
     await db.settings.put({ key: 'github', value: { owner: 'x', repo: 'y', token: 'SECRETO' } });
     await db.settings.put({ key: 'appearance', value: { accent: '#e07a5f' } });
