@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { entries, schema, useLiveQuery, type HabitValue, type MoodValue } from '@/data';
 import { formatLongDate, mondayOf, shiftDays, todayLocal } from '@/lib/date';
 import { Button, Heatmap } from '@/ui';
@@ -13,14 +12,14 @@ import styles from './DayEntry.module.css';
  * pantalla sirve para hoy y para editar un dia pasado.
  */
 interface Props {
+  date: string;
+  onDateChange: (date: string) => void;
   onManage: () => void;
   onManageMoods: () => void;
   onSync: () => void;
 }
 
-export function DayEntry({ onManage, onManageMoods, onSync }: Props) {
-  const [date, setDate] = useState(todayLocal());
-
+export function DayEntry({ date, onDateChange, onManage, onManageMoods, onSync }: Props) {
   const habits = useLiveQuery(() => schema.listActiveHabits(), []);
   const moods = useLiveQuery(() => schema.listActiveMoods(), []);
   const entry = useLiveQuery(() => entries.get(date), [date]);
@@ -65,7 +64,7 @@ export function DayEntry({ onManage, onManageMoods, onSync }: Props) {
             size="sm"
             aria-label="Dia anterior"
             onClick={() => {
-              setDate(shiftDays(date, -1));
+              onDateChange(shiftDays(date, -1));
             }}
           >
             ←
@@ -75,7 +74,7 @@ export function DayEntry({ onManage, onManageMoods, onSync }: Props) {
             <Button
               size="sm"
               onClick={() => {
-                setDate(todayLocal());
+                onDateChange(todayLocal());
               }}
             >
               Hoy
@@ -87,7 +86,7 @@ export function DayEntry({ onManage, onManageMoods, onSync }: Props) {
             aria-label="Dia siguiente"
             disabled={isToday}
             onClick={() => {
-              setDate(shiftDays(date, 1));
+              onDateChange(shiftDays(date, 1));
             }}
           >
             →
