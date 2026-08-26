@@ -33,7 +33,10 @@ const WEEKDAYS = [
  * Los siete dias se traducen a los tipos de frecuencia del modelo: todos es
  * `daily`, ninguno es `none`, y cualquier otra combinacion es `weekdays`.
  */
-function toFrequency(days: number[]): Frequency {
+function toFrequency(days: number[], times: number | null): Frequency {
+  // "N veces por semana" es otra cosa que dias concretos: sirve para lo que se
+  // hace tres veces a la semana sin importar cuales.
+  if (times !== null) return { kind: 'weekly', times };
   if (days.length === 7) return { kind: 'daily' };
   if (days.length === 0) return { kind: 'none' };
   return { kind: 'weekdays', days: [...days].sort((a, b) => a - b) };
@@ -47,6 +50,8 @@ export function HabitForm({ onDone }: { onDone: () => void }) {
   const [target, setTarget] = useState('');
   const [max, setMax] = useState('5');
   const [days, setDays] = useState<number[]>([1, 2, 3, 4, 5, 6, 7]);
+  // null = por dias concretos; un numero = N veces por semana.
+  const [times, setTimes] = useState<number | null>(null);
   const [color, setColor] = useState<string>(PALETTE[0]);
   const [error, setError] = useState<string | undefined>(undefined);
 
@@ -76,7 +81,7 @@ export function HabitForm({ onDone }: { onDone: () => void }) {
         : type === 'scale'
           ? { min: 1, max: upper, step: 1 }
           : {},
-      frequency: toFrequency(days),
+      frequency: toFrequency(days, times),
       color,
     });
     onDone();
@@ -179,9 +184,10 @@ export function HabitForm({ onDone }: { onDone: () => void }) {
                 key={day.iso}
                 type="button"
                 className={styles.day}
-                aria-pressed={selected}
+                aria-pressed={times === null && selected}
                 aria-label={day.name}
                 onClick={() => {
+                  setTimes(null);
                   setDays((current) =>
                     selected ? current.filter((iso) => iso !== day.iso) : [...current, day.iso],
                   );
@@ -192,12 +198,29 @@ export function HabitForm({ onDone }: { onDone: () => void }) {
             );
           })}
         </div>
+        <div className={styles.row}>
+          {[3, 4, 5].map((option) => (
+            <button
+              key={option}
+              type="button"
+              className={styles.times}
+              aria-pressed={times === option}
+              onClick={() => {
+                setTimes(times === option ? null : option);
+              }}
+            >
+              {option}/semana
+            </button>
+          ))}
+        </div>
         <p className={styles.dayHint}>
-          {days.length === 7
-            ? 'Todos los días'
-            : days.length === 0
-              ? 'Sin días fijos: se registra cuando toque'
-              : `${String(days.length)} días a la semana`}
+          {times !== null
+            ? `${String(times)} veces por semana, los días que quieras`
+            : days.length === 7
+              ? 'Todos los días'
+              : days.length === 0
+                ? 'Sin días fijos: se registra cuando toque'
+                : `${String(days.length)} días a la semana`}
         </p>
       </div>
 

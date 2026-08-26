@@ -25,6 +25,16 @@ function text(value: unknown): string | undefined {
 
 const HABITS_PATH = 'schemas/habits.json';
 const MOODS_PATH = 'schemas/moods.json';
+const SETTINGS_PATH = 'settings.json';
+
+/**
+ * Que preferencias viajan. Ver docs/adr/adr-repo.md.
+ *
+ * Ni el token ni la densidad: el primero es un secreto de este dispositivo y
+ * subirlo a un repositorio seria regalarlo; la segunda es lo unico que
+ * legitimamente difiere entre un movil y un monitor.
+ */
+const SYNCED_SETTINGS = ['appearance'];
 
 export interface SyncReport {
   pulled: number;
@@ -168,6 +178,22 @@ async function applyRemote(
     return { conflicts: [...habits.conflicts, ...moods.conflicts], changed: true, rewrite: true };
   }
 
+  if (path === SETTINGS_PATH) {
+    let changed = false;
+    for (const key of SYNCED_SETTINGS) {
+      const value = remote[key];
+      if (value === undefined) continue;
+      const mine = await db.settings.get(key);
+      const remoteAt = text(remote['updatedAt']) ?? '';
+      const mineAt = text((mine?.value as { updatedAt?: unknown } | undefined)?.updatedAt) ?? '';
+      if (remoteAt > mineAt) {
+        await db.settings.put({ key, value });
+        changed = true;
+      }
+    }
+    return { conflicts: [], changed, rewrite: !changed };
+  }
+
   // Los schemas se fusionan por id, con las mismas reglas.
   const table = path === HABITS_PATH ? db.habits : db.moodDimensions;
   const key = path === HABITS_PATH ? 'habits' : 'dimensions';
@@ -204,6 +230,16 @@ async function buildFile(path: string): Promise<string | null> {
       dimensions: await db.moodDimensions.toArray(),
     });
   }
+  if (path === SETTINGS_PATH) {
+    const rows = await db.settings.bulkGet(SYNCED_SETTINGS);
+    const payload: Record<string, unknown> = { updatedAt: new Date().toISOString() };
+    rows.forEach((row, index) => {
+      const key = SYNCED_SETTINGS[index];
+      if (row && key) payload[key] = row.value;
+    });
+    return stableStringify(payload);
+  }
+
   const date = path.slice(-15, -5);
   const entry = await db.entries.get(date);
   return entry ? stableStringify(entry) : null;

@@ -1,10 +1,12 @@
 export * as entries from './entries';
+export { enqueue } from './entries';
 export * as schema from './schema';
 export { db } from './db';
 export * from './serialize';
 export * from './merge';
 export * from './expectations';
 export * from './contrast';
+export * from './appearance';
 export * from './validation';
 export { loadFixture, buildFixture } from './seed';
 export { useLiveQuery } from './useLiveQuery';

@@ -1,7 +1,8 @@
 import { AxisBottom, AxisLeft } from '@visx/axis';
-import { curveMonotoneX } from '@visx/curve';
+import { curveMonotoneX, curveStepAfter } from '@visx/curve';
 import { Group } from '@visx/group';
 import { scaleLinear, scaleTime } from '@visx/scale';
+import { GridRows } from '@visx/grid';
 import { LinePath } from '@visx/shape';
 import { ChartFrame } from './ChartFrame';
 import { MARGIN, type Size } from './geometry';
@@ -18,6 +19,8 @@ interface Props {
   max: number;
   color: string;
   labels?: [string, string];
+  curve?: 'smooth' | 'step';
+  grid?: boolean;
 }
 
 /**
@@ -29,7 +32,7 @@ interface Props {
  * de interpolarse, porque interpolar seria inventar el animo de un dia que
  * nadie anoto.
  */
-export function Series({ title, points, min, max, color, labels }: Props) {
+export function Series({ title, points, min, max, color, labels, curve, grid }: Props) {
   const withValue = points.filter((point) => point.value !== null);
   const empty = withValue.length < 2;
 
@@ -83,6 +86,14 @@ export function Series({ title, points, min, max, color, labels }: Props) {
 
         return (
           <Group left={MARGIN.left} top={MARGIN.top}>
+            {grid ? (
+              <GridRows
+                scale={y}
+                width={innerWidth}
+                numTicks={Math.min(max - min + 1, 5)}
+                stroke="var(--color-border)"
+              />
+            ) : null}
             <AxisLeft
               scale={y}
               numTicks={Math.min(max - min + 1, 5)}
@@ -118,7 +129,7 @@ export function Series({ title, points, min, max, color, labels }: Props) {
                 data={segment}
                 x={(point) => x(dateOf(point.date))}
                 y={(point) => y(point.value ?? min)}
-                curve={curveMonotoneX}
+                curve={curve === 'step' ? curveStepAfter : curveMonotoneX}
                 stroke={color}
                 strokeWidth={2}
                 strokeLinecap="round"

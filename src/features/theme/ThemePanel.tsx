@@ -1,15 +1,18 @@
-import { contrastRatio, db, loadFixture, useLiveQuery } from '@/data';
-import { Button } from '@/ui';
 import {
-  applyAppearance,
-  applyDensity,
+  contrastRatio,
+  db,
   DEFAULT_APPEARANCE,
+  loadFixture,
   readAppearance,
   saveAppearance,
   saveDensity,
+  schema,
+  useLiveQuery,
   type Appearance,
   type Density,
-} from './theme';
+} from '@/data';
+import { Button } from '@/ui';
+import { applyAppearance, applyDensity } from './theme';
 import styles from './ThemePanel.module.css';
 
 const ACCENTS = ['#0d7dd4', '#e07a5f', '#81b29a', '#9d6bd4', '#c9184a', '#5f797b'] as const;
@@ -45,6 +48,18 @@ export function ThemePanel() {
     applyAppearance(next);
     void saveAppearance(next);
   }
+
+  const habits = useLiveQuery(() => schema.listActiveHabits(), []);
+
+  /**
+   * El tipo de grafica se responde por metrica, asi que vive en el schema y no
+   * en estas preferencias. Solo se ofrece donde hay eleccion real: una escala
+   * no se dibuja como heatmap de intensidad, porque un 3 sobre 5 no es "mas
+   * intenso" que un 2, es distinto.
+   */
+  const metrics = (habits ?? []).filter(
+    (habit) => habit.type === 'counter' || habit.type === 'duration',
+  );
 
   const background = appearance.theme === 'dark' ? '#162330' : '#ffffff';
   const ratio = contrastRatio(appearance.accent, background);
@@ -129,6 +144,78 @@ export function ThemePanel() {
           monitor.
         </p>
       </div>
+
+      <div className={styles.group}>
+        <p className={styles.title}>Gráficas</p>
+        <div className={styles.row}>
+          <Button
+            size="sm"
+            variant={appearance.chartCurve === 'smooth' ? 'primary' : 'ghost'}
+            onClick={() => {
+              update({ chartCurve: 'smooth' });
+            }}
+          >
+            Línea suave
+          </Button>
+          <Button
+            size="sm"
+            variant={appearance.chartCurve === 'step' ? 'primary' : 'ghost'}
+            onClick={() => {
+              update({ chartCurve: 'step' });
+            }}
+          >
+            Escalonada
+          </Button>
+        </div>
+        <div className={styles.row}>
+          <Button
+            size="sm"
+            variant={appearance.chartGrid ? 'primary' : 'ghost'}
+            onClick={() => {
+              update({ chartGrid: !appearance.chartGrid });
+            }}
+          >
+            {appearance.chartGrid ? 'Con rejilla' : 'Sin rejilla'}
+          </Button>
+          <Button
+            size="sm"
+            variant={appearance.cellRadius === 'rounded' ? 'primary' : 'ghost'}
+            onClick={() => {
+              update({ cellRadius: appearance.cellRadius === 'rounded' ? 'sharp' : 'rounded' });
+            }}
+          >
+            {appearance.cellRadius === 'rounded' ? 'Celdas redondas' : 'Celdas cuadradas'}
+          </Button>
+        </div>
+      </div>
+
+      {metrics.length > 0 ? (
+        <div className={styles.group}>
+          <p className={styles.title}>Cómo se dibuja cada métrica</p>
+          {metrics.map((habit) => {
+            const current = habit.display?.chart ?? 'bars';
+            return (
+              <div key={habit.id} className={styles.metric}>
+                <span className={styles.metricName}>{habit.name}</span>
+                <div className={styles.row}>
+                  {(['bars', 'line', 'heatmap'] as const).map((chart) => (
+                    <Button
+                      key={chart}
+                      size="sm"
+                      variant={current === chart ? 'primary' : 'ghost'}
+                      onClick={() => {
+                        void schema.updateHabit(habit.id, { display: { ...habit.display, chart } });
+                      }}
+                    >
+                      {{ bars: 'Barras', line: 'Línea', heatmap: 'Heatmap' }[chart]}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      ) : null}
 
       <Group title="Movimiento">
         <Button
