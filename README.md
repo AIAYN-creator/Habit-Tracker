@@ -73,7 +73,7 @@ lista, customización completa de apariencia, sincronización con GitHub y funci
 **Modo claro y oscuro ya entran aquí**, no más tarde: están en los design tokens desde el primer
 día, con conmutador manual y seguimiento del sistema.
 
-### v1.5
+### v1.5 — fuera del scope de la v1 pero prevista para finales de septiembre
 
 Tablero configurable con widgets reordenables. Ver
 [producto/dashboard.md](docs/producto/dashboard.md).
